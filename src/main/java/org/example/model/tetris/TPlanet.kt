@@ -6,6 +6,28 @@ import org.example.model.PlacedFigure
 class TPlanet : IPlanet {
     private var garbage: MutableMap<String, Figure> = HashMap()
 
+    private fun findTransformation(currentBaggage: IShipBaggage, pf: PlacedFigure, grid: Grid): Figure? {
+        for (i in 0..<currentBaggage.capacityX) {
+            for (j in 0..<currentBaggage.capacityY) {
+                var candidateFigure = pf.figure
+                for (k in 0..3) {
+                    var satisfy = true
+                    for (coord in candidateFigure.coords) {
+                        if (!grid.isFree(i + coord[0], j + coord[1])) {
+                            satisfy = false
+                            break
+                        }
+                    }
+                    if (satisfy) {
+                        return candidateFigure.shift(i, j)
+                    }
+                    candidateFigure = candidateFigure.rotate()
+                }
+            }
+        }
+        return null
+    }
+
     private fun upgradeLoad(currentBaggage: IShipBaggage): MutableList<PlacedFigure> {
         val allGarbage = garbage.map { (k, v) -> PlacedFigure(v, k) } + currentBaggage.load
         val sortedGarbage = allGarbage.sortedBy { pf ->
@@ -18,28 +40,12 @@ class TPlanet : IPlanet {
         val grid = Grid(currentBaggage.capacityX, currentBaggage.capacityY)
         val result = ArrayList<PlacedFigure>()
         sortedGarbage.forEach { pf ->
-            for (i in 0..<currentBaggage.capacityX) {
-                for (j in 0..<currentBaggage.capacityY) {
-                    var candidateFigure = pf.figure
-                    for (k in 0..3) {
-                        var satisfy = true
-                        for (coord in candidateFigure.coords) {
-                            if (grid.isFree(i + coord[0], j + coord[1])) {
-                                satisfy = false
-                                break
-                            }
-                        }
-                        if (satisfy) {
-                            val figure = candidateFigure.shift(i, j)
-                            for (coord in figure.coords) {
-                                grid.setCell(coord[0], coord[1], pf.name)
-                            }
-                            result.add(PlacedFigure(figure, pf.name))
-                            break
-                        }
-                        candidateFigure = candidateFigure.rotate()
-                    }
+            val figure = findTransformation(currentBaggage, pf, grid)
+            if (figure != null) {
+                for (coord in figure.coords) {
+                    grid.setCell(coord[0], coord[1], pf.name)
                 }
+                result.add(PlacedFigure(figure, pf.name))
             }
         }
         return result
