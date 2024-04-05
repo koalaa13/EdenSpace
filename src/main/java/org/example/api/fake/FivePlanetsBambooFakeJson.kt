@@ -36,7 +36,7 @@ private fun getInitialMap(): Map<String, MutableMap<String, Int>> = mapOf(
 from_one on One, from_two on Two, from_three on Three
 */
 // Planet name, SHIP or null
-private fun getInitialItemPositions(): MutableMap<String, String?> = mutableMapOf(
+private fun getInitialFigurePositions(): MutableMap<String, String?> = mutableMapOf(
     "from_one" to ONE,
     "from_two" to TWO,
     "from_three" to THREE
@@ -45,12 +45,12 @@ private fun getInitialItemPositions(): MutableMap<String, String?> = mutableMapO
 
 class FivePlanetsBambooFakeJson : IJson {
     private val graph = getInitialMap()
-    private val itemPositions = getInitialItemPositions()
+    private val figurePositions = getInitialFigurePositions()
     private var currentPlanet = EARTH
     private var score = 0
 
     private fun getFiguresOn(planetName: String): List<String> {
-        return itemPositions.entries.filter { it.value == planetName }.map { it.key }
+        return figurePositions.entries.filter { it.value == planetName }.map { it.key }
     }
 
     override fun getGameInfo(): GameInfo {
@@ -71,10 +71,10 @@ class FivePlanetsBambooFakeJson : IJson {
             require(to in graph[currentPlanet]!!)
             currentPlanet = to
             if (currentPlanet == EDEN) {
-                itemPositions.iterator().run {
+                figurePositions.iterator().run {
                     while (hasNext()) {
-                        val itemPosition = next()
-                        if (itemPosition.value == SHIP) {
+                        val figurePosition = next()
+                        if (figurePosition.value == SHIP) {
                             remove()
                             score++
                         }
@@ -92,7 +92,16 @@ class FivePlanetsBambooFakeJson : IJson {
     }
 
     override fun load(newGarbage: List<PlacedFigure>) {
-        TODO("Not yet implemented")
+        require(currentPlanet != EDEN)
+        for (figureName in figurePositions.keys) {
+            if (figurePositions[figureName] == SHIP) {
+                figurePositions[figureName] = currentPlanet
+            }
+        }
+        for (figure in newGarbage) {
+            val name = figure.figure.name
+            require(figurePositions[name]!! == currentPlanet)
+            figurePositions[name] = SHIP
+        }
     }
-
 }
