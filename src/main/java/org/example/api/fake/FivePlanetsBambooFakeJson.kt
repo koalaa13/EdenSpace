@@ -3,7 +3,7 @@ package org.example.api.fake
 import org.example.api.GameInfo
 import org.example.api.IJson
 import org.example.model.PlacedFigure
-import org.example.model.PlanetInfo
+import org.example.model.PlanetInfoDTO
 import org.example.model.graph.Graph
 import org.example.model.tetris.TShipBaggage
 
@@ -44,7 +44,7 @@ class FivePlanetsBambooFakeJson : IJson {
         return GameInfo(graph, TShipBaggage(CAPACITY_X, CAPACITY_Y))
     }
 
-    override fun move(trajectory: List<String>): PlanetInfo {
+    override fun move(trajectory: List<String>): PlanetInfoDTO {
         require(trajectory.isNotEmpty())
         for (to in trajectory) {
             require(to in graph[currentPlanet]!!)

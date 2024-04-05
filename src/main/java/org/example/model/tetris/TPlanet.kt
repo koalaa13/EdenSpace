@@ -4,7 +4,7 @@ import org.example.model.Figure
 import org.example.model.PlacedFigure
 
 class TPlanet : IPlanet {
-    var garbage: MutableList<Figure> = ArrayList()
+    private var garbage: MutableList<Figure> = ArrayList()
 
     private fun upgradeLoad(currentBaggage: MutableList<PlacedFigure>): MutableList<PlacedFigure> {
         return ArrayList()

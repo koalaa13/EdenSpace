@@ -1,13 +1,13 @@
 package org.example.model.response;
 
-import org.example.model.Ship;
+import org.example.model.ShipDTO;
 
 import java.util.List;
 
 public class InfoResponse {
     private List<List<Object>> universe;
 
-    private Ship ship;
+    private ShipDTO shipDTO;
 
     public List<List<Object>> getUniverse() {
         return universe;
@@ -17,11 +17,11 @@ public class InfoResponse {
         this.universe = universe;
     }
 
-    public Ship getShip() {
-        return ship;
+    public ShipDTO getShip() {
+        return shipDTO;
     }
 
-    public void setShip(Ship ship) {
-        this.ship = ship;
+    public void setShip(ShipDTO shipDTO) {
+        this.shipDTO = shipDTO;
     }
 }
