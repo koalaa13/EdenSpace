@@ -8,7 +8,7 @@ public class ShipDTO {
     private int capacityY;
 
     private Map<String, Figure> garbage;
-    private PlanetInfoDTO planet;
+    private PlanetInfo planet;
 
     public int getFuelUsed() {
         return fuelUsed;
@@ -42,11 +42,11 @@ public class ShipDTO {
         this.garbage = garbage;
     }
 
-    public PlanetInfoDTO getPlanet() {
+    public PlanetInfo getPlanet() {
         return planet;
     }
 
-    public void setPlanet(PlanetInfoDTO planet) {
+    public void setPlanet(PlanetInfo planet) {
         this.planet = planet;
     }
 }

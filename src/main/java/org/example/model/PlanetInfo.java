@@ -2,7 +2,7 @@ package org.example.model;
 
 import java.util.Map;
 
-public class PlanetInfoDTO {
+public class PlanetInfo {
     private String name;
     private Map<String, Figure> garbage;
 
