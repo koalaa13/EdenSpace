@@ -1,5 +1,6 @@
 package org.example.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Figure {
@@ -16,6 +17,14 @@ public class Figure {
             this.coords[i][0] = coords.get(i).get(0);
             this.coords[i][1] = coords.get(i).get(1);
         }
+    }
+
+    public List<List<Integer>> getCoordsAsNonPrimitive() {
+        List<List<Integer>> arr = new ArrayList<>(this.coords.length);
+        for (int[] p : this.coords) {
+            arr.add(List.of(p[0], p[1]));
+        }
+        return arr;
     }
 
     public int[][] getCoords() {

@@ -54,6 +54,6 @@ public class JsonImpl implements IJson {
 
     @Override
     public void load(List<PlacedFigure> newGarbage) {
-        // TODO
+        apiController.collectRequest(newGarbage);
     }
 }
