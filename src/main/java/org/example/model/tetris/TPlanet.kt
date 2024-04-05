@@ -30,6 +30,9 @@ class TPlanet : IPlanet {
 
     override fun makeOptimalLoad(baggage: IShipBaggage) {
         baggage.load = findOptimalLoad(baggage)
+        for (figure in baggage.load) {
+            garbage.remove(figure.name)
+        }
     }
 
     override fun setGarbage(garbage: MutableMap<String, Figure>) {
