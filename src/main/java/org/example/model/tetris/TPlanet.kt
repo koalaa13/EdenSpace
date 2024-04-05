@@ -4,43 +4,45 @@ import org.example.model.Figure
 import org.example.model.PlacedFigure
 
 class TPlanet : IPlanet {
-    private var garbage: MutableList<Figure> = ArrayList()
+    private var garbage: MutableMap<String, Figure> = HashMap()
 
     private fun upgradeLoad(currentBaggage: IShipBaggage): MutableList<PlacedFigure> {
-        val allGarbage = garbage + currentBaggage.load.map { p -> p.figure }
-        val sortedGarbage = allGarbage.sortedBy { f ->
-            val minX = f.coords.minOf { a -> a[0] }
-            val maxX = f.coords.maxOf { a -> a[0] }
-            val minY = f.coords.minOf { a -> a[1] }
-            val maxY = f.coords.maxOf { a -> a[1] }
+        val allGarbage = garbage.map { (k, v) -> PlacedFigure(v, k) } + currentBaggage.load
+        val sortedGarbage = allGarbage.sortedBy { pf ->
+            val minX = pf.figure.coords.minOf { a -> a[0] }
+            val maxX = pf.figure.coords.maxOf { a -> a[0] }
+            val minY = pf.figure.coords.minOf { a -> a[1] }
+            val maxY = pf.figure.coords.maxOf { a -> a[1] }
             maxY - minY + maxX - minX
         }
-        val grid = Array(currentBaggage.capacityX) { Array(currentBaggage.capacityY) { "" } }
+        val grid = Grid(currentBaggage.capacityX, currentBaggage.capacityY)
         val result = ArrayList<PlacedFigure>()
-        sortedGarbage.forEach { f ->
+        sortedGarbage.forEach { pf ->
             for (i in 0..<currentBaggage.capacityX) {
                 for (j in 0..<currentBaggage.capacityY) {
+                    var candidateFigure = pf.figure
                     for (k in 0..3) {
-                        val rotatedFigure = f // Need to rotate
                         var satisfy = true
-                        for (coord in rotatedFigure.coords) {
-                            if (grid[i + coord[0]][j + coord[1]] != "") {
+                        for (coord in candidateFigure.coords) {
+                            if (grid.isFree(i + coord[0], j + coord[1])) {
                                 satisfy = false
                                 break
                             }
                         }
                         if (satisfy) {
-                            for (coord in rotatedFigure.coords) {
-                                grid[i + coord[0]][j + coord[1]] = "1"
+                            val figure = candidateFigure.shift(i, j)
+                            for (coord in figure.coords) {
+                                grid.setCell(coord[0], coord[1], pf.name)
                             }
-                            result.add(PlacedFigure(rotatedFigure, "1"))
+                            result.add(PlacedFigure(figure, pf.name))
                             break
                         }
+                        candidateFigure = candidateFigure.rotate()
                     }
                 }
             }
         }
-        return ArrayList()
+        return result
     }
 
     override fun getHowManyCanAdd(baggage: IShipBaggage): Int {
@@ -51,9 +53,9 @@ class TPlanet : IPlanet {
         baggage.load = upgradeLoad(baggage)
     }
 
-    override fun setGarbage(garbage: MutableList<Figure>) {
+    override fun setGarbage(garbage: MutableMap<String, Figure>) {
         this.garbage = garbage
     }
 
-    override fun getGarbage(): MutableList<Figure> = garbage
+    override fun getGarbage(): MutableMap<String, Figure> = garbage
 }

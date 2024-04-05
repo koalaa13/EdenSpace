@@ -4,6 +4,7 @@ import org.example.model.Figure;
 import org.example.model.PlacedFigure;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IPlanet {
     // Возвращает сколько кусков мусора можно уместить в заданный корабль с этой планеты,
@@ -14,8 +15,8 @@ public interface IPlanet {
     void makeOptimalLoad(IShipBaggage baggage);
 
     // Обновляет информацию о мусоре на этой планете
-    void setGarbage(List<Figure> garbage);
+    void setGarbage(Map<String, Figure> garbage);
 
     // Возвращает весь мусор на этой планете
-    List<Figure> getGarbage();
+    Map<String, Figure> getGarbage();
 }
