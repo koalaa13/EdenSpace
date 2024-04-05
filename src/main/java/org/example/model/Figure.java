@@ -19,6 +19,14 @@ public class Figure {
         }
     }
 
+    public List<List<Integer>> getCoordsAsNonPrimitive() {
+        List<List<Integer>> arr = new ArrayList<>(this.coords.length);
+        for (int[] p : this.coords) {
+            arr.add(List.of(p[0], p[1]));
+        }
+        return arr;
+    }
+
     public Figure shift(int deltaX, int deltaY) {
         List<List<Integer>> newCoords = new ArrayList<>();
         for (var coord : coords) {

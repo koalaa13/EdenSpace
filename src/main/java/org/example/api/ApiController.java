@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.example.model.PlacedFigure;
 import org.example.model.response.InfoResponse;
 import org.example.model.response.TravelResponse;
 
@@ -84,5 +85,25 @@ public class ApiController {
             System.err.println(e);
         }
         return travelResponse;
+    }
+
+    public void collectRequest(List<PlacedFigure> placedFigures) {
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            final Map<String, List<List<Integer>>> takenFigures = new HashMap<>();
+            for (PlacedFigure placedFigure : placedFigures) {
+                takenFigures.put(placedFigure.getName(), placedFigure.getFigure().getCoordsAsNonPrimitive());
+            }
+
+            final String json  = objectMapper.writeValueAsString(Map.of("garbage", takenFigures));
+            final StringEntity entity = new StringEntity(json);
+
+            HttpPost request = new HttpPost(API_URL + "/collect");
+            request.setHeader(API_AUTH_HEADER, API_KEY);
+            request.setEntity(entity);
+
+            client.execute(request);
+        } catch (IOException e) {
+            System.err.println(e);
+        }
     }
 }
