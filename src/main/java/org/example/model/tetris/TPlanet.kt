@@ -21,7 +21,7 @@ class TPlanet : IPlanet {
             for (i in 0..<currentBaggage.capacityX) {
                 for (j in 0..<currentBaggage.capacityY) {
                     for (k in 0..3) {
-                        val rotatedFigure = f.rotate()
+                        val rotatedFigure = f // Need to rotate
                         var satisfy = true
                         for (coord in rotatedFigure.coords) {
                             if (grid[i + coord[0]][j + coord[1]] != "") {
@@ -31,9 +31,9 @@ class TPlanet : IPlanet {
                         }
                         if (satisfy) {
                             for (coord in rotatedFigure.coords) {
-                                grid[i + coord[0]][j + coord[1]] = f.name
+                                grid[i + coord[0]][j + coord[1]] = "1"
                             }
-                            result.add(PlacedFigure(rotatedFigure, i, j))
+                            result.add(PlacedFigure(rotatedFigure, "1"))
                             break
                         }
                     }
