@@ -6,7 +6,9 @@ import org.example.model.PlacedFigure;
 import java.util.List;
 
 public interface IPlanet {
-    float calcScore(IShipBaggage baggage);
+    // Возвращает сколько кусков мусора можно уместить в заданный корабль с этой планеты,
+    // ничего не меняя в их состояниях
+    int getHowManyCanAdd(IShipBaggage baggage);
 
     // Загружает корабль
     void makeOptimalLoad(IShipBaggage baggage);
