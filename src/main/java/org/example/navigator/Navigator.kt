@@ -34,20 +34,22 @@ class Navigator(graph: Graph) : INavigator {
         return buildPathToEden(origin) + buildPathToEden(destination).dropLast(1).reversed() + destination
     }
 
-    override fun getMove(currentPlanet: String, baggage: IShipBaggage): List<String> {
-        // TODO (first move doesn't reuqire Eden)
-        if (willExplore || knownPlanets.isEmpty()) {
-            val unexploredPlanet = planetNames.firstOrNull {
-                it !in knownPlanets && it !in setOf(EDEN, EARTH)
-            }
-            if (unexploredPlanet != null) {
-                willExplore = false
-                return buildPath(currentPlanet, unexploredPlanet)
-            }
+    override fun getMove(currentPlanet: String, baggage: IShipBaggage): List<String>? {
+        val bestKnownPlanet = knownPlanets.maxByOrNull { it.value.getHowManyCanAdd(baggage) }
+        val unexploredPlanet = planetNames.firstOrNull {
+            it !in knownPlanets && it !in setOf(EDEN, EARTH)
         }
 
-        willExplore = true
-        return buildPath(currentPlanet, knownPlanets.maxBy { it.value.getHowManyCanAdd(baggage) }.key)
+        val wantKnown = bestKnownPlanet != null && bestKnownPlanet.value.getHowManyCanAdd(baggage) > 0
+        val wantUnexplored = unexploredPlanet != null
+
+        val destination = when {
+            wantUnexplored -> unexploredPlanet!!
+            wantKnown -> bestKnownPlanet!!.key
+            else -> return null
+        }
+
+        return buildPath(currentPlanet, destination)
     }
 
     override fun setPlanetGarbage(planetName: String, garbage: Map<String, Figure>): IPlanet {

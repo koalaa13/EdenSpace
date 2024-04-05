@@ -24,6 +24,9 @@ public class Game {
         var currentPlanet = "Earth";
         while (true) {
             var move = navigator.getMove(currentPlanet, shipBaggage);
+            if (move == null) {
+                return;
+            }
             var planetInfo = json.move(move);
             currentPlanet = planetInfo.getName();
             var planet = navigator.setPlanetGarbage(currentPlanet, planetInfo.getGarbage());
