@@ -1,9 +1,8 @@
 package org.example.model;
 
-import java.util.List;
 import java.util.Map;
 
-public class PlanetInfo {
+public class PlanetInfoDTO {
     private String name;
     private Map<String, Figure> garbage;
 

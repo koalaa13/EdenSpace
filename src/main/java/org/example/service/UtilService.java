@@ -6,6 +6,17 @@ import org.example.model.response.InfoResponse;
 import java.util.List;
 
 public class UtilService {
+    private static UtilService INSTANCE;
+
+    public static UtilService getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new UtilService();
+        }
+        return INSTANCE;
+    }
+
+    private UtilService() {
+    }
     public Graph buildGraph(InfoResponse universeResponse) {
         Graph graph = new Graph();
         for (List<Object> e : universeResponse.getUniverse()) {

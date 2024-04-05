@@ -3,16 +3,13 @@ package org.example.model;
 import java.util.List;
 
 public class Figure {
-    private final String name;
     private final int[][] coords;
 
     public Figure(String name, int[][] coords) {
-        this.name = name;
         this.coords = coords;
     }
 
-    public Figure(List<List<Integer>> coords, String name) {
-        this.name = name;
+    public Figure(List<List<Integer>> coords) {
         int n = coords.size();
         this.coords = new int[n][2];
         for (int i = 0; i < n; ++i) {
@@ -23,9 +20,5 @@ public class Figure {
 
     public int[][] getCoords() {
         return coords;
-    }
-
-    public String getName() {
-        return name;
     }
 }

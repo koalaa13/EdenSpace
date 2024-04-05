@@ -24,7 +24,15 @@ public class ApiController {
     private static final String API_KEY = "660dce29d27cc660dce29d27ce";
     private final ObjectMapper objectMapper;
 
-    public ApiController() {
+    private static ApiController INSTANCE = null;
+    public static ApiController getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ApiController();
+        }
+        return INSTANCE;
+    }
+
+    private ApiController() {
         this.objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 

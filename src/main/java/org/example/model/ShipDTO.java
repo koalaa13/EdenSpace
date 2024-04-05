@@ -2,13 +2,13 @@ package org.example.model;
 
 import java.util.Map;
 
-public class Ship {
+public class ShipDTO {
     private int fuelUsed;
     private int capacityX;
     private int capacityY;
 
     private Map<String, Figure> garbage;
-    private PlanetInfo planet;
+    private PlanetInfoDTO planet;
 
     public int getFuelUsed() {
         return fuelUsed;
@@ -42,11 +42,11 @@ public class Ship {
         this.garbage = garbage;
     }
 
-    public PlanetInfo getPlanet() {
+    public PlanetInfoDTO getPlanet() {
         return planet;
     }
 
-    public void setPlanet(PlanetInfo planet) {
+    public void setPlanet(PlanetInfoDTO planet) {
         this.planet = planet;
     }
 }
