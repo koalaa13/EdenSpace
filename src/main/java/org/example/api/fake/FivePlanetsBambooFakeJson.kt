@@ -86,7 +86,7 @@ class FivePlanetsBambooFakeJson : IJson {
         return PlanetInfo().apply {
             name = currentPlanet
             garbage = getFiguresOn(currentPlanet).associate { figureName ->
-                figureName to Figure(FIGURE, figureName)
+                figureName to Figure(FIGURE)
             }
         }
     }
@@ -99,7 +99,7 @@ class FivePlanetsBambooFakeJson : IJson {
             }
         }
         for (figure in newGarbage) {
-            val name = figure.figure.name
+            val name = figure.name
             require(figurePositions[name]!! == currentPlanet)
             figurePositions[name] = SHIP
         }
