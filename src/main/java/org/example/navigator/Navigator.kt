@@ -34,6 +34,7 @@ class Navigator(graph: Graph) : INavigator {
     }
 
     override fun getMove(currentPlanet: String, baggage: IShipBaggage): List<String> {
+        // TODO (first move doesn't reuqire Eden)
         if (willExplore || knownPlanets.isEmpty()) {
             val unexploredPlanet = planetNames.firstOrNull { it !in knownPlanets }
             if (unexploredPlanet != null) {
