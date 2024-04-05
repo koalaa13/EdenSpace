@@ -9,6 +9,8 @@ public interface IShipBaggage {
     // Возвращает расположение мусора внутри корабля
     List<PlacedFigure> getLoad();
 
+    void setLoad(List<PlacedFigure> newLoad);
+
     // Полностью очищает мусор внутри корабля
     void clean();
 }

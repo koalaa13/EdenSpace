@@ -6,16 +6,16 @@ import org.example.model.PlacedFigure
 class TPlanet : IPlanet {
     var garbage: MutableList<Figure> = ArrayList()
 
-    private fun upgradeLoad(baggage: IShipBaggage): MutableList<PlacedFigure> {
+    private fun upgradeLoad(currentBaggage: MutableList<PlacedFigure>): MutableList<PlacedFigure> {
         return ArrayList()
     }
 
     override fun getHowManyCanAdd(baggage: IShipBaggage): Int {
-        TODO("Not yet implemented")
+        return upgradeLoad(baggage.load).size - baggage.load.size
     }
 
     override fun makeOptimalLoad(baggage: IShipBaggage) {
-        TODO("Not yet implemented")
+        baggage.load = upgradeLoad(baggage.load)
     }
 
     override fun setGarbage(garbage: MutableList<Figure>) {
