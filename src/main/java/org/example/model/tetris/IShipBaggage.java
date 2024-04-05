@@ -11,6 +11,10 @@ public interface IShipBaggage {
 
     void setLoad(List<PlacedFigure> newLoad);
 
+    int getCapacityX();
+
+    int getCapacityY();
+
     // Полностью очищает мусор внутри корабля
     void clean();
 }
