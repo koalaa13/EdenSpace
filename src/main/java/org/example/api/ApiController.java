@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.example.model.response.ShipResponse;
-import org.example.model.response.UniverseResponse;
+import org.example.model.response.InfoResponse;
 
 import java.io.IOException;
 
@@ -22,35 +21,19 @@ public class ApiController {
         this.objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public UniverseResponse universeRequest() {
-        UniverseResponse universeResponse = null;
+    public InfoResponse infoRequest() {
+        InfoResponse universeResponse = null;
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             HttpGet request = new HttpGet(API_URL + "/universe");
             request.setHeader(API_AUTH_HEADER, API_KEY);
 
             universeResponse = client.execute(
                     request,
-                    response -> objectMapper.readValue(response.getEntity().getContent(), UniverseResponse.class)
+                    response -> objectMapper.readValue(response.getEntity().getContent(), InfoResponse.class)
             );
         } catch (IOException e) {
             System.err.println(e);
         }
         return universeResponse;
-    }
-
-    public ShipResponse shipRequest() {
-        ShipResponse shipResponse = null;
-        try (CloseableHttpClient client = HttpClients.createDefault()) {
-            HttpGet request = new HttpGet(API_URL + "/universe");
-            request.setHeader(API_AUTH_HEADER, API_KEY);
-
-            shipResponse = client.execute(
-                    request,
-                    response -> objectMapper.readValue(response.getEntity().getContent(), ShipResponse.class)
-            );
-        } catch (IOException e) {
-            System.err.println(e);
-        }
-        return shipResponse;
     }
 }
