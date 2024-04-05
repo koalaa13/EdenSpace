@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.api.ApiController;
+import org.example.api.FakeIJson;
 import org.example.model.graph.Graph;
 import org.example.service.UtilService;
 
@@ -10,5 +11,6 @@ public class Main {
 
     public static void main(String[] args) {
         var response = apiController.infoRequest();
+        var fakeIJson = new FakeIJson();
     }
 }

@@ -20,7 +20,3 @@ public interface IJson {
     void load(List<PlacedFigure> newGarbage);
 }
 
-class GameInfo {
-    Graph graph;
-    IShipBaggage baggage;
-}
