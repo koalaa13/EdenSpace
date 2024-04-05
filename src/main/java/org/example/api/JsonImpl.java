@@ -4,6 +4,7 @@ import org.example.model.PlacedFigure;
 import org.example.model.PlanetInfo;
 import org.example.model.graph.Graph;
 import org.example.model.response.InfoResponse;
+import org.example.model.response.TravelResponse;
 import org.example.model.tetris.IShipBaggage;
 import org.example.model.tetris.TShipBaggage;
 import org.example.service.UtilService;
@@ -44,8 +45,11 @@ public class JsonImpl implements IJson {
 
     @Override
     public PlanetInfo move(List<String> trajectory) {
-        // TODO
-        return null;
+        TravelResponse travelResponse = apiController.travelRequest(trajectory);
+        // Имя планеты -- это место назначения
+        String name = trajectory.get(trajectory.size() - 1);
+
+        return new PlanetInfo(name, travelResponse.getPlanetGarbage());
     }
 
     @Override
