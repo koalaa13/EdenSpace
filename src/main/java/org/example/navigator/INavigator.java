@@ -1,4 +1,4 @@
-package org.example.model.graph;
+package org.example.navigator;
 
 import org.example.model.Figure;
 import org.example.model.tetris.IPlanet;
