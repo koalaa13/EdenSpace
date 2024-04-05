@@ -12,7 +12,7 @@ class TAbstractGreedySolver(val priorityFunc: (Int, Int, Int, Int) -> Int) : ISo
         return priorityFunc(minX, maxX, minY, maxY)
     }
 
-    private fun findTransformation(currentBaggage: IShipBaggage, pf: PlacedFigure, grid: Grid): Figure? {
+    private fun findTransformation(currentBaggage: IShipBaggage, pf: PlacedFigure, grid: Grid): PlacedFigure? {
         for (i in 0..<currentBaggage.capacityX) {
             for (j in 0..<currentBaggage.capacityY) {
                 var candidateFigure = pf.figure
@@ -25,18 +25,20 @@ class TAbstractGreedySolver(val priorityFunc: (Int, Int, Int, Int) -> Int) : ISo
                         }
                     }
                     if (satisfy) {
-                        return candidateFigure.shift(i, j)
+                        return PlacedFigure(candidateFigure, i, j, pf.name)
                     }
-                    candidateFigure = candidateFigure.rotate()
+                    candidateFigure = candidateFigure.rotated()
                 }
             }
         }
         return null
     }
 
-    override fun findOptimalLoad(currentBaggage: IShipBaggage,
-                                 garbage: MutableMap<String, Figure>): MutableList<PlacedFigure> {
-        val allGarbage = garbage.map { (k, v) -> PlacedFigure(v, k) } + currentBaggage.load
+    override fun findOptimalLoad(
+        currentBaggage: IShipBaggage,
+        garbage: MutableMap<String, Figure>
+    ): MutableList<PlacedFigure> {
+        val allGarbage = garbage.map { (k, v) -> PlacedFigure(v, 0, 0, k) } + currentBaggage.load
         val sortedGarbage = allGarbage.sortedBy { pf -> getPriority(pf) }
         val grid = Grid(currentBaggage.capacityX, currentBaggage.capacityY)
         val result = ArrayList<PlacedFigure>()
@@ -44,9 +46,9 @@ class TAbstractGreedySolver(val priorityFunc: (Int, Int, Int, Int) -> Int) : ISo
             val figure = findTransformation(currentBaggage, pf, grid)
             if (figure != null) {
                 for (coord in figure.coords) {
-                    grid.setCell(coord[0], coord[1], pf.name)
+                    grid.setCell(coord.first, coord.second, pf.name)
                 }
-                result.add(PlacedFigure(figure, pf.name))
+                result.add(figure)
             }
         }
         return result
