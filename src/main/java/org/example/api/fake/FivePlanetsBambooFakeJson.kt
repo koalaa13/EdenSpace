@@ -7,6 +7,7 @@ import org.example.model.PlacedFigure
 import org.example.model.PlanetInfo
 import org.example.model.graph.Graph
 import org.example.model.tetris.TShipBaggage
+import org.example.visual.ship.ConsoleShipVisualizer
 
 private const val EDEN = "Eden"
 private const val EARTH = "Earth"
@@ -42,6 +43,7 @@ private fun getInitialFigurePositions(): MutableMap<String, String?> = mutableMa
     "from_three" to THREE
 )
 
+private val shipVisualizer = ConsoleShipVisualizer()
 
 class FivePlanetsBambooFakeJson : IJson {
     private val graph = getInitialMap()
@@ -66,7 +68,7 @@ class FivePlanetsBambooFakeJson : IJson {
     }
 
     override fun move(trajectory: List<String>): PlanetInfo {
-        System.err.println("[fake] move: ${trajectory.joinToString()}")
+        println("[fake] move: ${trajectory.joinToString()}")
 
         require(trajectory.isNotEmpty())
         for (to in trajectory) {
@@ -94,7 +96,8 @@ class FivePlanetsBambooFakeJson : IJson {
     }
 
     override fun load(newGarbage: List<PlacedFigure>) {
-        System.err.println("[fake] load: ${newGarbage.size}")
+        println("[fake] load:")
+        shipVisualizer.visualize(newGarbage, CAPACITY_X, CAPACITY_Y)
 
         require(currentPlanet != EDEN)
         for (figureName in figurePositions.keys) {

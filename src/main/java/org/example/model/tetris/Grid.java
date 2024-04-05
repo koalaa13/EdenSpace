@@ -12,7 +12,7 @@ public class Grid {
     }
 
     public boolean isFree(int x, int y) {
-        return x >= 0 && x < capacityX && y >= 0 && y < capacityY && grid[x][y].equals("");
+        return x >= 0 && x < capacityX && y >= 0 && y < capacityY && grid[x][y] == null;
     }
 
     public void setCell(int x, int y, String value) {
