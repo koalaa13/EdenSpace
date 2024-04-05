@@ -35,7 +35,7 @@ public class JsonImpl implements IJson {
                 .entrySet()
                 .stream()
                 .map(e ->
-                        new PlacedFigure(e.getValue(), 0, 0, e.getKey())
+                        new PlacedFigure(e.getValue(), e.getKey())
                 )
                 .toList();
         shipBaggage.setLoad(placedFigures);
