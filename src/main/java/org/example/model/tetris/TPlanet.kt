@@ -6,12 +6,17 @@ import org.example.model.PlacedFigure
 class TPlanet : IPlanet {
     private var garbage: MutableMap<String, Figure> = HashMap()
 
-    private val solvers: List<ISolver> = listOf(
-        TAbstractGreedySolver { minX, maxX, minY, maxY -> (maxY - minY + maxX - minX) },  // By perimetr
-        TAbstractGreedySolver { minX, maxX, minY, maxY -> (maxY - minY) * (maxX - minX) },  // By area
-        TAbstractGreedySolver { minX, maxX, minY, maxY -> -(maxY - minY + maxX - minX) },  // From big to small
-        TAbstractGreedySolver { minX, maxX, minY, maxY -> -(maxY - minY) * (maxX - minX) },
-    )
+    companion object {
+        private val solvers: List<ISolver> = listOf(
+                TAbstractGreedySolver { minX, maxX, minY, maxY -> (maxY - minY + maxX - minX) },  // By perimetr
+                TAbstractGreedySolver { minX, maxX, minY, maxY -> (maxY - minY) * (maxX - minX) },  // By area
+                TAbstractGreedySolver { minX, maxX, minY, maxY -> -(maxY - minY + maxX - minX) },  // From big to small
+                TAbstractGreedySolver { minX, maxX, minY, maxY -> -(maxY - minY) * (maxX - minX) },
+        )
+        fun getSolvers(): List<ISolver> {
+            return solvers;
+        }
+    }
 
     private fun findOptimalLoad(currentBaggage: IShipBaggage): MutableList<PlacedFigure> {
         return solvers
