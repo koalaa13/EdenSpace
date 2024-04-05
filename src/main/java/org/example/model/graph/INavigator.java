@@ -1,14 +1,13 @@
 package org.example.model.graph;
 
 import org.example.model.Figure;
-import org.example.model.PlacedFigure;
 import org.example.model.tetris.IPlanet;
 import org.example.model.tetris.IShipBaggage;
 
 import java.util.List;
 
 // Хранит IPlanet объекты, чтобы решать куда лететь
-public interface IGraph {
+public interface INavigator {
     // Возвращает ход перемещения, который сейчас надо сделать с заданным имеющимся багажом
     List<String> getMove(IShipBaggage baggage);
 
