@@ -66,6 +66,8 @@ class FivePlanetsBambooFakeJson : IJson {
     }
 
     override fun move(trajectory: List<String>): PlanetInfo {
+        System.err.println("[fake] move: ${trajectory.joinToString()}")
+
         require(trajectory.isNotEmpty())
         for (to in trajectory) {
             require(to in graph[currentPlanet]!!)
@@ -92,6 +94,8 @@ class FivePlanetsBambooFakeJson : IJson {
     }
 
     override fun load(newGarbage: List<PlacedFigure>) {
+        System.err.println("[fake] load: ${newGarbage.size}")
+
         require(currentPlanet != EDEN)
         for (figureName in figurePositions.keys) {
             if (figurePositions[figureName] == SHIP) {

@@ -7,6 +7,8 @@ import org.example.model.tetris.IShipBaggage
 import org.example.model.tetris.TPlanet
 
 private const val EDEN = "Eden"
+private const val EARTH = "Earth"
+
 
 class Navigator(graph: Graph) : INavigator {
     private val nextOnThePathToEden = computeNextPlanetOnThePathToEden(graph)
@@ -28,21 +30,23 @@ class Navigator(graph: Graph) : INavigator {
         }
     }
 
-
     private fun buildPath(origin: String, destination: String): List<String> {
-        return buildPathToEden(origin) + buildPathToEden(destination).reversed()
+        return buildPathToEden(origin) + buildPathToEden(destination).dropLast(1).reversed() + destination
     }
 
     override fun getMove(currentPlanet: String, baggage: IShipBaggage): List<String> {
         // TODO (first move doesn't reuqire Eden)
         if (willExplore || knownPlanets.isEmpty()) {
-            val unexploredPlanet = planetNames.firstOrNull { it !in knownPlanets }
+            val unexploredPlanet = planetNames.firstOrNull {
+                it !in knownPlanets && it !in setOf(EDEN, EARTH)
+            }
             if (unexploredPlanet != null) {
                 willExplore = false
                 return buildPath(currentPlanet, unexploredPlanet)
             }
         }
 
+        willExplore = true
         return buildPath(currentPlanet, knownPlanets.maxBy { it.value.getHowManyCanAdd(baggage) }.key)
     }
 

@@ -31,7 +31,7 @@ public class Game {
             json.load(shipBaggage.getLoad());
             shipBaggage.clean();
 
-            Thread.sleep(100);
+            Thread.sleep(1000);
         }
     }
 }
