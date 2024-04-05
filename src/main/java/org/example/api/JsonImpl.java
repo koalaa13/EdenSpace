@@ -1,7 +1,7 @@
 package org.example.api;
 
 import org.example.model.PlacedFigure;
-import org.example.model.PlanetInfoDTO;
+import org.example.model.PlanetInfo;
 import org.example.model.graph.Graph;
 import org.example.model.response.InfoResponse;
 import org.example.model.tetris.IShipBaggage;
@@ -9,7 +9,6 @@ import org.example.model.tetris.TShipBaggage;
 import org.example.service.UtilService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class JsonImpl implements IJson {
     private final UtilService utilService;
@@ -44,7 +43,7 @@ public class JsonImpl implements IJson {
     }
 
     @Override
-    public PlanetInfoDTO move(List<String> trajectory) {
+    public PlanetInfo move(List<String> trajectory) {
         // TODO
         return null;
     }
