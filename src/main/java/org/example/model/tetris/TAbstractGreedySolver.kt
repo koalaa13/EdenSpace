@@ -18,6 +18,7 @@ class TAbstractGreedySolver(val priorityFunc: (Int, Int, Int, Int) -> Int) : ISo
                 var candidateFigure = pf.figure
                 for (k in 0..3) {
                     var satisfy = true
+                    candidateFigure.normalize()
                     for (coord in candidateFigure.coords) {
                         if (!grid.isFree(i + coord[0], j + coord[1])) {
                             satisfy = false
@@ -25,9 +26,9 @@ class TAbstractGreedySolver(val priorityFunc: (Int, Int, Int, Int) -> Int) : ISo
                         }
                     }
                     if (satisfy) {
-                        return candidateFigure.shift(i, j)
+                        return candidateFigure.shifted(i, j)
                     }
-                    candidateFigure = candidateFigure.rotate()
+                    candidateFigure = candidateFigure.rotated()
                 }
             }
         }

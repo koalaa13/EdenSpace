@@ -3,6 +3,8 @@ package org.example.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.min;
+
 public class Figure {
     private final int[][] coords;
 
@@ -27,7 +29,7 @@ public class Figure {
         return arr;
     }
 
-    public Figure shift(int deltaX, int deltaY) {
+    public Figure shifted(int deltaX, int deltaY) {
         List<List<Integer>> newCoords = new ArrayList<>();
         for (var coord : coords) {
             List<Integer> inner = new ArrayList<>();
@@ -38,11 +40,24 @@ public class Figure {
         return new Figure(newCoords);
     }
 
+    public void normalize() {
+        var minX = Integer.MAX_VALUE;
+        var minY = Integer.MAX_VALUE;
+        for (int i = 0; i < coords.length; i++) {
+            minX = min(minX, coords[i][0]);
+            minY = min(minY, coords[i][1]);
+        }
+        for (int i = 0; i < coords.length; i++) {
+            coords[i][0] -= minX;
+            coords[i][1] -= minY;
+        }
+    }
+
     public int[][] getCoords() {
         return coords;
     }
 
-    public Figure rotate() {
+    public Figure rotated() {
         List<List<Integer>> newCoords = new ArrayList<>();
         for (var coord : coords) {
             newCoords.add(List.of(-coord[1], coord[0]));
