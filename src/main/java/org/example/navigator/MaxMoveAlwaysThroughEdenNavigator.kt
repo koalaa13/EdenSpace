@@ -12,17 +12,17 @@ private const val EARTH = "Earth"
 Всегда летает через Eden
 */
 class MaxMoveAlwaysThroughEdenNavigator(graph: Graph) : AbstractNavigator(graph) {
-    override fun buildShortestPaths(origin: String) = DijkstraFuelNumberOfEdges(origin, state.graph)
+    override fun buildShortestPaths(origin: String) = DijkstraFuelNumberOfEdges(origin, graph)
 
     override fun getPlanetsToVisit(currentPlanet: String, baggage: IShipBaggage): List<String>? {
-        val unexploredPlanet = state.planetNames.firstOrNull {
-            it !in state.knownPlanets && it !in setOf(EDEN, EARTH)
+        val unexploredPlanet = planetNames.firstOrNull {
+            it !in knownPlanets && it !in setOf(EDEN, EARTH)
         }
         if (unexploredPlanet != null) {
             return listOf(EDEN, unexploredPlanet)
         }
 
-        val bestKnownPlanet = state.knownPlanets.maxByOrNull { it.value.getHowManyCanAdd(baggage) }
+        val bestKnownPlanet = knownPlanets.maxByOrNull { it.value.getHowManyCanAdd(baggage) }
 
         return when {
             bestKnownPlanet != null && bestKnownPlanet.value.getHowManyCanAdd(baggage) > 0 ->
