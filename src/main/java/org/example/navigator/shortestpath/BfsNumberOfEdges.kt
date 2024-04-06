@@ -18,6 +18,7 @@ class BfsNumberOfEdges(origin: String, graph: Graph) : ShortestPath<Int> {
                     continue
                 }
                 distanceTo[e.to] = newDistance
+                lastOnPathTo[e.to] = node
                 queue.add(e.to)
             }
         }
