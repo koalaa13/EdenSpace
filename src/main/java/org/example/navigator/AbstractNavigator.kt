@@ -8,15 +8,9 @@ import org.example.model.tetris.TPlanet
 import org.example.navigator.shortestpath.BfsNumberOfEdges
 import org.example.navigator.shortestpath.ShortestPath
 
-private const val EARTH = "Earth"
 
-abstract class AbstractNavigator(protected val graph: Graph) : INavigator {
-    protected val planetNames = BfsNumberOfEdges(EARTH, graph).getReachable()
-
-    /*
-    Хранит только планеты, на которых точно знает весь мусор, не хранит Землю и Eden
-    */
-    protected val knownPlanets = mutableMapOf<String, IPlanet>()
+abstract class AbstractNavigator(graph: Graph) : INavigator {
+    protected val state = NavigatorState(graph)
 
     protected abstract fun getPlanetsToVisit(currentPlanet: String, baggage: IShipBaggage): List<String>?
 
@@ -28,11 +22,11 @@ abstract class AbstractNavigator(protected val graph: Graph) : INavigator {
             var currentPlanet = currentPlanet
             for (next in planetsToVisit) {
                 val trajectory = buildShortestPaths(currentPlanet).getIntermediate(next) + next
-                graph.getEdgesFrom(currentPlanet)[trajectory[0]] =
-                    graph.getEdgesFrom(currentPlanet)[trajectory[0]]!! + 10
+                state.graph.getEdgesFrom(currentPlanet)[trajectory[0]] =
+                    state.graph.getEdgesFrom(currentPlanet)[trajectory[0]]!! + 10
                 for (i in 1 until trajectory.size) {
-                    graph.getEdgesFrom(trajectory[i - 1])[trajectory[i]] =
-                        graph.getEdgesFrom(trajectory[i - 1])[trajectory[i]]!! + 10
+                    state.graph.getEdgesFrom(trajectory[i - 1])[trajectory[i]] =
+                        state.graph.getEdgesFrom(trajectory[i - 1])[trajectory[i]]!! + 10
                 }
                 addAll(trajectory)
                 currentPlanet = next
@@ -41,9 +35,9 @@ abstract class AbstractNavigator(protected val graph: Graph) : INavigator {
     }
 
     override fun setPlanetGarbage(planetName: String, garbage: Map<String, Figure>): IPlanet {
-        val planet = knownPlanets.getOrDefault(planetName, TPlanet())
+        val planet = state.knownPlanets.getOrDefault(planetName, TPlanet())
         planet.garbage = garbage
-        knownPlanets[planetName] = planet
+        state.knownPlanets[planetName] = planet
         return planet
     }
 }
