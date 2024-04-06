@@ -37,8 +37,15 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
             .maxByOrNull { it.third }
 
         return when {
-            bestKnownPlanet != null && bestKnownPlanet.second.getHowManyCanAdd(baggage) > 0 ->
-                listOf(EDEN, bestKnownPlanet.first)
+            bestKnownPlanet != null && bestKnownPlanet.second.getHowManyCanAdd(baggage) > 0 -> {
+                if (baggage.freeSpace.toDouble() / baggage.area > 0.3 &&
+                    baggage.loadConvexHullArea.toDouble() / baggage.area < 0.8
+                ) {
+                    listOf(bestKnownPlanet.first)
+                } else {
+                    listOf(EDEN, bestKnownPlanet.first)
+                }
+            }
 
             currentPlanet != EDEN -> listOf(EDEN)
             else -> null
