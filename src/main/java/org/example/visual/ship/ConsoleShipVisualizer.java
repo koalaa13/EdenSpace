@@ -30,7 +30,7 @@ public class ConsoleShipVisualizer implements ShipVisualizer {
         int figureSym = 0;
         for (PlacedFigure placedFigure : placedFigures) {
             for (int[] p : placedFigure.getFigure().getCoords()) {
-                field[p[0]][p[1]] = (char) (figureSym + 'A');
+                field[p[1]][p[0]] = (char) (figureSym + 'A');
             }
             figureSym = (figureSym + 1) % 26;
         }
