@@ -109,7 +109,7 @@ public class ApiController {
             request.setHeader(API_AUTH_HEADER, API_KEY);
             request.setEntity(entity);
 
-            client.execute(request);
+            client.execute(request, response -> responseHandling(response, Object.class));
         } catch (IOException e) {
             System.err.println(e);
         }

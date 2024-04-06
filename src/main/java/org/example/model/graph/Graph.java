@@ -15,6 +15,10 @@ public class Graph {
         g.get(v).put(u, w);
     }
 
+    public int getVertexesCount() {
+        return g.size();
+    }
+
     public Map<String, Integer> getEdgesFrom(String v) {
         return g.getOrDefault(v, new HashMap<>());
     }
