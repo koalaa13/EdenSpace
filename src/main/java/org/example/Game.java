@@ -3,9 +3,7 @@ package org.example;
 import org.example.api.IJson;
 import org.example.api.JsonImpl;
 import org.example.api.fake.FakeJsons;
-import org.example.api.fake.FakeJsonsKt;
-import org.example.api.fake.FivePlanetsBambooFakeJson;
-import org.example.navigator.MaxMoveAlwaysThroughEdenNavigator;
+import org.example.navigator.Navigator;
 
 // Основной класс, который крутит игру в продакшене или на фейке.
 // Если хотите что-то быстро протестить, меняйте Main, а не этот класс
@@ -20,7 +18,7 @@ public class Game {
 
     private static void playWithJson(IJson json) throws Exception {
         var gameInfo = json.getGameInfo();
-        var navigator = new MaxMoveAlwaysThroughEdenNavigator(gameInfo.getGraph());
+        var navigator = new Navigator(gameInfo.getGraph());
         var shipBaggage = gameInfo.getShipBaggage();
 
         var currentPlanet = "Earth";

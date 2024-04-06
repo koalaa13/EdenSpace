@@ -11,7 +11,7 @@ private const val EARTH = "Earth"
 Сначала посещает все планеты по одному разу, затем летает на ту, с которой можно вывезти больше всего мусора.
 Всегда летает через Eden
 */
-class MaxMoveAlwaysThroughEdenNavigator(graph: Graph) : AbstractNavigator(graph) {
+class Navigator(graph: Graph) : AbstractNavigator(graph) {
     override fun buildShortestPaths(origin: String) = DijkstraFuelNumberOfEdges(origin, graph)
 
     override fun getPlanetsToVisit(currentPlanet: String, baggage: IShipBaggage): List<String>? {
