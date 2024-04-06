@@ -1,8 +1,10 @@
 package org.example.model;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class ShipDTO {
+public class Ship {
     private int fuelUsed;
     private int capacityX;
     private int capacityY;
@@ -38,8 +40,11 @@ public class ShipDTO {
         return garbage;
     }
 
-    public void setGarbage(Map<String, Figure> garbage) {
-        this.garbage = garbage;
+    public void setGarbage(Map<String, List<List<Integer>>> garbage) {
+        this.garbage = new HashMap<>();
+        for (var e : garbage.entrySet()) {
+            this.garbage.put(e.getKey(), new Figure(e.getValue()));
+        }
     }
 
     public PlanetInfo getPlanet() {
