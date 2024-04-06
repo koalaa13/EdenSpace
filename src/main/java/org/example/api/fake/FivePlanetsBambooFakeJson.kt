@@ -2,6 +2,7 @@ package org.example.api.fake
 
 import org.example.api.GameInfo
 import org.example.api.IJson
+import org.example.api.MoveInfo
 import org.example.model.Figure
 import org.example.model.PlacedFigure
 import org.example.model.PlanetInfo
@@ -32,6 +33,7 @@ class FivePlanetsBambooFakeJson(
     private val existingFigures: MutableMap<String, ServerFigureInfo>,
 ) : IJson {
     private var currentPlanet = EARTH
+    private var currentLoad: List<PlacedFigure> = listOf()
     private var score = 0
     private var fuelSpent = 0
 
@@ -51,7 +53,7 @@ class FivePlanetsBambooFakeJson(
         return GameInfo(graph, TShipBaggage(CAPACITY_X, CAPACITY_Y))
     }
 
-    override fun move(trajectory: List<String>): PlanetInfo {
+    override fun move(trajectory: List<String>): MoveInfo {
         println("[fake] move: ${trajectory.joinToString()}")
 
         require(trajectory.isNotEmpty())
@@ -70,14 +72,16 @@ class FivePlanetsBambooFakeJson(
                         }
                     }
                 }
+                currentLoad = listOf()
             }
         }
-
-        println("[fake] score: $score, $fuelSpent")
-        return PlanetInfo().apply {
+        val planetInfo = PlanetInfo().apply {
             name = currentPlanet
             garbage = getFiguresOn(currentPlanet).associate { (name, info) -> name to Figure(info.shape) }
         }
+
+        println("[fake] score: $score, $fuelSpent")
+        return MoveInfo(planetInfo, currentLoad.toList())
     }
 
     override fun load(newGarbage: List<PlacedFigure>) {
@@ -95,6 +99,7 @@ class FivePlanetsBambooFakeJson(
             require(figureInfo.location == currentPlanet)
             figureInfo.location = SHIP
         }
+        currentLoad = newGarbage
 
         println("[fake] score: $score, $fuelSpent")
     }

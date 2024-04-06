@@ -29,7 +29,9 @@ public class Game {
             if (move == null) {
                 return;
             }
-            var planetInfo = json.move(move);
+            var moveInfo = json.move(move);
+            var planetInfo = moveInfo.getPlanetInfo();
+            shipBaggage.setLoad(moveInfo.getShipLoad());
             currentPlanet = planetInfo.getName();
             var planet = navigator.setPlanetGarbage(currentPlanet, planetInfo.getGarbage());
             planet.makeOptimalLoad(shipBaggage);
