@@ -14,29 +14,22 @@ private const val EARTH = "Earth"
 class MaxMoveAlwaysThroughEdenNavigator(graph: Graph) : AbstractNavigator(graph) {
     override fun buildShortestPaths(origin: String) = DijkstraFuelNumberOfEdges(origin, graph)
 
-    private fun buildPath(currentPlanet: String, destination: String): List<String> {
-        return if (destination == EDEN) {
-            buildShortestTrajectory(currentPlanet, EDEN)
-        } else {
-            buildShortestTrajectory(currentPlanet, EDEN) + buildShortestTrajectory(EDEN, destination)
-        }
-    }
-
-    override fun getMove(currentPlanet: String, baggage: IShipBaggage): List<String>? {
+    override fun getPlanetsToVisit(currentPlanet: String, baggage: IShipBaggage): List<String>? {
         val unexploredPlanet = planetNames.firstOrNull {
             it !in knownPlanets && it !in setOf(EDEN, EARTH)
         }
         if (unexploredPlanet != null) {
-            return buildPath(currentPlanet, unexploredPlanet)
+            return listOf(EDEN, unexploredPlanet)
         }
 
         val bestKnownPlanet = knownPlanets.maxByOrNull { it.value.getHowManyCanAdd(baggage) }
 
-        val destination = when {
-            bestKnownPlanet != null && bestKnownPlanet.value.getHowManyCanAdd(baggage) > 0 -> bestKnownPlanet.key
-            currentPlanet != EDEN -> EDEN
-            else -> return null
+        return when {
+            bestKnownPlanet != null && bestKnownPlanet.value.getHowManyCanAdd(baggage) > 0 ->
+                listOf(EDEN, bestKnownPlanet.key)
+
+            currentPlanet != EDEN -> listOf(EDEN)
+            else -> null
         }
-        return buildPath(currentPlanet, destination)
     }
 }

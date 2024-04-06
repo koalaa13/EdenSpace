@@ -35,17 +35,17 @@ class DijkstraFuelNumberOfEdges(private val origin: String, graph: Graph) :
         while (heap.isNotEmpty()) {
             val (dist, node) = heap.pollFirst()!!
             for (e in graph.getEdgesFrom(node)) {
-                val currentDistance = distanceTo[e.to]
-                val newDistance = dist.plusEdge(e.fuelWeight)
+                val currentDistance = distanceTo[e.key]
+                val newDistance = dist.plusEdge(e.value)
                 if (currentDistance != null && currentDistance <= newDistance) {
                     continue
                 }
                 if (currentDistance != null) {
-                    heap.remove(currentDistance to e.to)
+                    heap.remove(currentDistance to e.key)
                 }
-                distanceTo[e.to] = newDistance
-                lastOnPathTo[e.to] = node
-                heap.add(newDistance to e.to)
+                distanceTo[e.key] = newDistance
+                lastOnPathTo[e.key] = node
+                heap.add(newDistance to e.key)
             }
         }
     }

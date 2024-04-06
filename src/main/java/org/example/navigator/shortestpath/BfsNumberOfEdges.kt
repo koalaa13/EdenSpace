@@ -14,12 +14,12 @@ class BfsNumberOfEdges(origin: String, graph: Graph) : ShortestPath<Int> {
             val node = queue.removeFirst()
             val newDistance = distanceTo[node]!! + 1
             for (e in graph.getEdgesFrom(node)) {
-                if (e.to in distanceTo) {
+                if (e.key in distanceTo) {
                     continue
                 }
-                distanceTo[e.to] = newDistance
-                lastOnPathTo[e.to] = node
-                queue.add(e.to)
+                distanceTo[e.key] = newDistance
+                lastOnPathTo[e.key] = node
+                queue.add(e.key)
             }
         }
     }
