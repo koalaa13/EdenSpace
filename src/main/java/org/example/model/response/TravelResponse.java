@@ -17,6 +17,9 @@ public class TravelResponse {
 
     public void setPlanetGarbage(Map<String, List<List<Integer>>> planetGarbage) {
         this.planetGarbage = new HashMap<>();
+        if (planetGarbage == null) {
+            return;
+        }
         for (var gi : planetGarbage.entrySet()) {
             this.planetGarbage.put(gi.getKey(), new Figure(gi.getValue()));
         }
@@ -28,6 +31,9 @@ public class TravelResponse {
 
     public void setShipGarbage(Map<String, List<List<Integer>>> shipGarbage) {
         this.shipGarbage = new HashMap<>();
+        if (shipGarbage == null) {
+            return;
+        }
         for (var gi : shipGarbage.entrySet()) {
             this.shipGarbage.put(gi.getKey(), new Figure(gi.getValue()));
         }

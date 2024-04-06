@@ -38,13 +38,18 @@ public class ApiController {
     }
 
     private <T> T responseHandling(HttpResponse response, Class<? extends T> okResponseClass) throws IOException {
-        var content = response.getEntity().getContent();
-        if (response.getStatusLine().getStatusCode() != 200) {
-            String errorMessage = objectMapper.readTree(content).get("error").asText();
-            System.err.println(errorMessage);
-            return null;
+        try {
+            var content = response.getEntity().getContent();
+            if (response.getStatusLine().getStatusCode() != 200) {
+                String errorMessage = objectMapper.readTree(content).get("error").asText();
+                System.err.println(errorMessage);
+                return null;
+            }
+            return objectMapper.readValue(content, okResponseClass);
+        } catch (Exception e) {
+            System.err.println(e);
         }
-        return objectMapper.readValue(content, okResponseClass);
+        return null;
     }
 
     public InfoResponse infoRequest() {
