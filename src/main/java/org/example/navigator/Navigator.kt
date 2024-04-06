@@ -47,12 +47,15 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
 //        }
 
         val emptyBaggage = TShipBaggage(baggage.capacityX, baggage.capacityY)
-        val bestKnownPlanet = knownPlanets
-            .map { Triple(it.key, it.value, it.value.getHowManyCanAdd(emptyBaggage)) }
-            .maxByOrNull { it.third }
+        val shortestPathFromEden = buildShortestPaths(EDEN)
+        val nearestToEdenKnownPlanet = knownPlanets
+            .filter { it.value.howMuchCanFillPercentage(emptyBaggage) >= 0.35 }
+            .map { Triple(it.key, it.value, shortestPathFromEden.distanceTo[it.key]!!) }
+            .minByOrNull { it.third }
+            ?.first
 
-        if (bestKnownPlanet != null && bestKnownPlanet.third > 0) {
-            return listOf(EDEN, bestKnownPlanet.first)
+        if (nearestToEdenKnownPlanet != null) {
+            return listOf(EDEN, nearestToEdenKnownPlanet)
         }
 
         if (currentPlanet != EDEN) {
