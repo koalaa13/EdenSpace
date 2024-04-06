@@ -44,7 +44,7 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
                 ) {
                     listOf(bestKnownPlanet.first)
                 } else {
-                    listOf(EDEN, bestKnownPlanet.first)
+                    listOf(EDEN)
                 }
             }
 

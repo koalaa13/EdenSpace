@@ -57,10 +57,6 @@ public class Game {
             System.out.println("$ New load");
             shipVisualizer.visualize(shipBaggage.getLoad(), shipBaggage.getCapacityX(), shipBaggage.getCapacityY());
             json.load(shipBaggage.getLoad());
-            if (move.contains("Eden")) {
-                shipBaggage.clean();
-            }
-            System.out.println("Ship is cleaned");
             Thread.sleep(1000);
         }
     }
