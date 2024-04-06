@@ -14,7 +14,6 @@ private const val EARTH = "Earth"
 private const val ONE = "One"
 private const val TWO = "Two"
 private const val THREE = "Three"
-private const val EDGE_WEIGHT = 1
 private const val CAPACITY_X = 3
 private const val CAPACITY_Y = 3
 
@@ -30,14 +29,14 @@ private data class ServerFigureInfo(
 Eden <-> Earth <-> One <-> Two <-> Three
 */
 private fun getInitialMap(): Map<String, MutableMap<String, Int>> = mapOf(
-    EDEN to mutableMapOf(EARTH to EDGE_WEIGHT),
-    EARTH to mutableMapOf(EDEN to EDGE_WEIGHT, ONE to EDGE_WEIGHT),
-    ONE to mutableMapOf(EARTH to EDGE_WEIGHT, TWO to EDGE_WEIGHT),
-    TWO to mutableMapOf(ONE to EDGE_WEIGHT, THREE to EDGE_WEIGHT),
-    THREE to mutableMapOf(TWO to EDGE_WEIGHT)
+    EDEN to mutableMapOf(EARTH to 100),
+    EARTH to mutableMapOf(EDEN to 100, ONE to 1),
+    ONE to mutableMapOf(EARTH to 1, TWO to 1),
+    TWO to mutableMapOf(ONE to 1, THREE to 1),
+    THREE to mutableMapOf(TWO to 1)
 )
 
-private fun getInitialFigures(): MutableMap<String, ServerFigureInfo> = mutableMapOf<String, ServerFigureInfo>().apply {
+private fun getInitialFigures1(): MutableMap<String, ServerFigureInfo> = mutableMapOf<String, ServerFigureInfo>().apply {
     val planets = setOf(ONE, TWO, THREE)
     val shapes = listOf(
         listOf(listOf(1, 1), listOf(1, 2), listOf(2, 2)),
@@ -55,12 +54,18 @@ private fun getInitialFigures(): MutableMap<String, ServerFigureInfo> = mutableM
     }
 }
 
+private fun getInitialFigures2(): MutableMap<String, ServerFigureInfo> = mutableMapOf<String, ServerFigureInfo>().apply {
+    put("0", ServerFigureInfo(listOf(listOf(1, 1)), ONE))
+    put("1", ServerFigureInfo(listOf(listOf(1, 1)), TWO))
+    put("2", ServerFigureInfo(listOf(listOf(1, 1)), THREE))
+}
+
 private val shipVisualizer = ConsoleShipVisualizer()
 
 class FivePlanetsBambooFakeJson : IJson {
     private val graph = getInitialMap()
 
-    private val existingFigures = getInitialFigures()
+    private val existingFigures = getInitialFigures2()
     private var currentPlanet = EARTH
     private var score = 0
     private var fuelSpent = 0
