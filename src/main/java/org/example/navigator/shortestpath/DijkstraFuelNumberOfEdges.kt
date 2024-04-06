@@ -10,7 +10,7 @@ class DijkstraFuelNumberOfEdges(private val origin: String, graph: Graph) :
             if (fuel != other.fuel) {
                 fuel.compareTo(other.fuel)
             } else {
-                numberOfEdges.compareTo(numberOfEdges)
+                numberOfEdges.compareTo(other.numberOfEdges)
             }
 
         fun plusEdge(fuelWeight: Int): Distance = Distance(fuel + fuelWeight, numberOfEdges + 1)

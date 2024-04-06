@@ -8,10 +8,10 @@ import org.example.model.tetris.TPlanet
 import org.example.navigator.shortestpath.BfsNumberOfEdges
 import org.example.navigator.shortestpath.ShortestPath
 
-private const val EARTH = "Earth"
+private const val EDEN = "Eden"
 
 abstract class AbstractNavigator(protected val graph: Graph) : INavigator {
-    protected val planetNames = BfsNumberOfEdges(EARTH, graph).getReachable()
+    protected val planetNames = BfsNumberOfEdges(EDEN, graph).getReachable()
 
     /*
     Хранит только планеты, на которых точно знает весь мусор, не хранит Землю и Eden
