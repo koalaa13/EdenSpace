@@ -15,18 +15,24 @@ class MaxMoveAlwaysThroughEdenNavigator(graph: Graph) : AbstractNavigator(graph)
     override fun buildShortestPaths(origin: String) = DijkstraFuelNumberOfEdges(origin, graph)
 
     override fun getPlanetsToVisit(currentPlanet: String, baggage: IShipBaggage): List<String>? {
-        val unexploredPlanet = planetNames.firstOrNull {
-            it !in knownPlanets && it !in setOf(EDEN, EARTH)
-        }
+        val shortestPath = buildShortestPaths(currentPlanet)
+        val unexploredPlanet = (planetNames - knownPlanets.keys - setOf(EDEN, EARTH))
+            .map { it to shortestPath.distanceTo[it] }
+            .filter { it.second != null }
+            .minByOrNull { it.second!! }
+            ?.first
+
         if (unexploredPlanet != null) {
             return listOf(EDEN, unexploredPlanet)
         }
 
-        val bestKnownPlanet = knownPlanets.maxByOrNull { it.value.getHowManyCanAdd(baggage) }
+        val bestKnownPlanet = knownPlanets
+            .map { Triple(it.key, it.value, it.value.getHowManyCanAdd(baggage)) }
+            .maxByOrNull { it.third }
 
         return when {
-            bestKnownPlanet != null && bestKnownPlanet.value.getHowManyCanAdd(baggage) > 0 ->
-                listOf(EDEN, bestKnownPlanet.key)
+            bestKnownPlanet != null && bestKnownPlanet.second.getHowManyCanAdd(baggage) > 0 ->
+                listOf(EDEN, bestKnownPlanet.first)
 
             currentPlanet != EDEN -> listOf(EDEN)
             else -> null
