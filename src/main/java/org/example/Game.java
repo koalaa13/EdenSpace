@@ -2,6 +2,8 @@ package org.example;
 
 import org.example.api.IJson;
 import org.example.api.JsonImpl;
+import org.example.api.fake.FakeJsons;
+import org.example.api.fake.FakeJsonsKt;
 import org.example.api.fake.FivePlanetsBambooFakeJson;
 import org.example.navigator.MaxMoveAlwaysThroughEdenNavigator;
 
@@ -13,7 +15,7 @@ public class Game {
     }
 
     public static void playFake() throws Exception {
-        playWithJson(new FivePlanetsBambooFakeJson());
+        playWithJson(FakeJsons.INSTANCE.get2());
     }
 
     private static void playWithJson(IJson json) throws Exception {
