@@ -43,7 +43,7 @@ public class JsonImpl implements IJson {
         List<PlacedFigure> placedFigures = getPlacedFiguresFromResponse(infoResponse.getShip().getGarbage());
         shipBaggage.setLoad(placedFigures);
 
-        return new GameInfo(graph, shipBaggage);
+        return new GameInfo(graph, shipBaggage, infoResponse.getShip().getPlanet().getName());
     }
 
     @Override

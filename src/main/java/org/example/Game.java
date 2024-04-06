@@ -21,7 +21,7 @@ public class Game {
         var navigator = new Navigator(gameInfo.getGraph());
         var shipBaggage = gameInfo.getShipBaggage();
 
-        var currentPlanet = "Earth";
+        var currentPlanet = gameInfo.getStartPlanet();
         while (true) {
             var move = navigator.getMove(currentPlanet, shipBaggage);
             if (move == null) {
