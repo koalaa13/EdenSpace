@@ -1,6 +1,5 @@
 package org.example.stress;
 
-import kotlin.ranges.IntRange;
 import org.example.model.Figure;
 import org.example.model.PlacedFigure;
 import org.example.model.tetris.ISolver;
@@ -8,19 +7,25 @@ import org.example.model.tetris.TPlanet;
 import org.example.model.tetris.TShipBaggage;
 import org.example.stress.generator.figure.FigureGenerator;
 import org.example.stress.generator.figure.SnakeFigureGenerator;
+import org.example.stress.validator.OverlayTetrisValidator;
+import org.example.stress.validator.TetrisValidator;
 import org.example.visual.figure.ConsoleFigureVisualizer;
 import org.example.visual.figure.FigureVisualizer;
 import org.example.visual.ship.ConsoleShipVisualizer;
 import org.example.visual.ship.ShipVisualizer;
-import org.w3c.dom.ls.LSOutput;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class StressTest {
     private static final FigureGenerator FIGURE_GENERATOR = new SnakeFigureGenerator(10, false);
     private static final FigureVisualizer FIGURE_VISUALIZER = new ConsoleFigureVisualizer();
 
     private static final ShipVisualizer SHIP_VISUALIZER = new ConsoleShipVisualizer();
+
+    private static final List<TetrisValidator> VALIDATORS = List.of(
+            new OverlayTetrisValidator()
+    );
 
     private static void testCase() {
         int w = 10;
@@ -40,6 +45,22 @@ public class StressTest {
         List<ISolver> solvers = getSolvers();
         for (int i = 0; i < solvers.size(); ++i) {
             List<PlacedFigure> placedFigures = testCaseSolver(solvers.get(i), w, h, figureMap);
+
+            String validatorsErrorsAsString = VALIDATORS.stream()
+                    .map(v -> v.test(placedFigures, figureMap))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.joining("\n"));
+            if (!validatorsErrorsAsString.isEmpty()) {
+                System.err.println("SOLVER #" + i);
+                System.err.println("VALIDATORS ERROR");
+                System.err.println(validatorsErrorsAsString);
+                System.err.println("PLACEMENT:");
+                SHIP_VISUALIZER.visualize(placedFigures, w, h);
+                System.exit(1);
+            }
+
+
             System.out.println("SOLVER #" + i);
             System.out.println("FIGURES PLACED: " + placedFigures.size());
             System.out.println("PLACEMENT:");
