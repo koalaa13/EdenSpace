@@ -50,7 +50,7 @@ class FivePlanetsBambooFakeJson(
             }
         }
 
-        return GameInfo(graph, TShipBaggage(CAPACITY_X, CAPACITY_Y))
+        return GameInfo(graph, TShipBaggage(CAPACITY_X, CAPACITY_Y), currentPlanet)
     }
 
     override fun move(trajectory: List<String>): MoveInfo {
