@@ -6,6 +6,7 @@ import org.example.model.tetris.TShipBaggage
 import org.example.navigator.shortestpath.BfsNumberOfEdges
 import org.example.navigator.shortestpath.DijkstraFuelNumberOfEdges
 import org.example.navigator.shortestpath.ShortestPath
+import kotlin.math.ceil
 
 private const val EDEN = "Eden"
 private const val EARTH = "Earth"
@@ -34,9 +35,10 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
             return listOf(EDEN, unexploredPlanet)
         }
 
-        if (baggage.loadConvexHullArea.toDouble() / baggage.area > 0.0001) {
+        if (baggage.busySpace > 0) {
+            val needNew = ceil(baggage.area * 0.05).toInt()
             val nearestKnownPlanet = knownPlanets
-                .filter { it.value.howMuchCanFillPercentage(baggage) >= 0.07 }
+                .filter { it.value.howManyCanAddCell(baggage) >= needNew }
                 .map { Triple(it.key, it.value, shortestPath.distanceTo[it.key]!!) }
                 .minByOrNull { it.third }
                 ?.first
@@ -46,10 +48,11 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
             }
         }
 
+        val needNewFromEmpty = ceil(baggage.area * 0.3).toInt()
         val emptyBaggage = TShipBaggage(baggage.capacityX, baggage.capacityY)
         val shortestPathFromEden = buildShortestPaths(EDEN, i)
         val nearestToEdenKnownPlanet = knownPlanets
-            .filter { it.value.howMuchCanFillPercentage(emptyBaggage) >= 0.35 }
+            .filter { it.value.howManyCanAddCell(emptyBaggage) >= needNewFromEmpty }
             .map { Triple(it.key, it.value, shortestPathFromEden.distanceTo[it.key]!!) }
             .minByOrNull { it.third }
             ?.first
@@ -59,7 +62,7 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
         }
 
         val bestKnownPlanet = knownPlanets
-            .map { Triple(it.key, it.value, it.value.getHowManyCanAdd(emptyBaggage)) }
+            .map { Triple(it.key, it.value, it.value.howManyCanAddCell(emptyBaggage)) }
             .maxByOrNull { it.third }
 
         if (bestKnownPlanet != null && bestKnownPlanet.third > 0) {

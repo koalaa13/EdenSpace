@@ -21,6 +21,9 @@ public interface IShipBaggage {
     // Возвращает число пустых клеточек
     int getFreeSpace();
 
+    // Возвращает число пустых клеточек
+    int getBusySpace();
+
     // Возвращает размер прямоугольника, являющегося выпуклой оболочкой мусора внутри
     int getLoadConvexHullArea();
 

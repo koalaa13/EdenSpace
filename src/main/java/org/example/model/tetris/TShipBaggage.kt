@@ -20,6 +20,10 @@ class TShipBaggage(private val capacityX: Int, private val capacityY: Int) : ISh
         return area - placedFigures.sumOf { it.figure.coords.size }
     }
 
+    override fun getBusySpace(): Int {
+        return placedFigures.sumOf { it.figure.coords.size }
+    }
+
     override fun getLoadConvexHullArea(): Int {
         if (placedFigures.isEmpty()) {
             return 0

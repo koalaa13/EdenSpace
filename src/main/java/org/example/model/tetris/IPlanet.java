@@ -13,6 +13,8 @@ public interface IPlanet {
 
     double howMuchCanFillPercentage(IShipBaggage baggage);
 
+    int howManyCanAddCell(IShipBaggage baggage);
+
     // Загружает корабль
     void makeOptimalLoad(IShipBaggage baggage);
 

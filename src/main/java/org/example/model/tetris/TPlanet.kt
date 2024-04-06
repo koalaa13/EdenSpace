@@ -55,6 +55,11 @@ class TPlanet : IPlanet {
         return UtilService.getInstance().calcFillPercentage(optimal, baggage.capacityX, baggage.capacityY) - UtilService.getInstance().calcFillPercentage(baggage)
     }
 
+    override fun howManyCanAddCell(baggage: IShipBaggage): Int {
+        val optimal = findOptimalLoad(baggage)
+        return optimal.sumOf { it.figure.coords.size } - baggage.load.sumOf { it.figure.coords.size }
+    }
+
     override fun makeOptimalLoad(baggage: IShipBaggage) {
         val brought = baggage.load.toList()
         baggage.load = findOptimalLoad(baggage)
