@@ -63,6 +63,7 @@ class FivePlanetsBambooFakeJson : IJson {
     private val existingFigures = getInitialFigures()
     private var currentPlanet = EARTH
     private var score = 0
+    private var fuelSpent = 0
 
     private fun getFiguresOn(planetName: String): List<Map.Entry<String, ServerFigureInfo>> {
         return existingFigures.entries.filter { it.value.location == planetName }
@@ -81,11 +82,13 @@ class FivePlanetsBambooFakeJson : IJson {
     }
 
     override fun move(trajectory: List<String>): PlanetInfo {
-        println("[fake] <score: $score> move: ${trajectory.joinToString()}")
+        println("[fake] move: ${trajectory.joinToString()}")
 
         require(trajectory.isNotEmpty())
         for (to in trajectory) {
             require(to in graph[currentPlanet]!!)
+            fuelSpent += graph[currentPlanet]!![to]!!
+            graph[currentPlanet]!![to] = graph[currentPlanet]!![to]!! + 10
             currentPlanet = to
             if (currentPlanet == EDEN) {
                 existingFigures.iterator().run {
@@ -100,6 +103,7 @@ class FivePlanetsBambooFakeJson : IJson {
             }
         }
 
+        println("[fake] score: $score, $fuelSpent")
         return PlanetInfo().apply {
             name = currentPlanet
             garbage = getFiguresOn(currentPlanet).associate { (name, info) -> name to Figure(info.shape) }
@@ -107,7 +111,7 @@ class FivePlanetsBambooFakeJson : IJson {
     }
 
     override fun load(newGarbage: List<PlacedFigure>) {
-        println("[fake] <score: $score> load:")
+        println("[fake] load:")
         shipVisualizer.visualize(newGarbage, CAPACITY_X, CAPACITY_Y)
 
         require(currentPlanet != EDEN)
@@ -122,5 +126,7 @@ class FivePlanetsBambooFakeJson : IJson {
             require(figureInfo.location == currentPlanet)
             figureInfo.location = SHIP
         }
+
+        println("[fake] score: $score, $fuelSpent")
     }
 }
