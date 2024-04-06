@@ -5,6 +5,7 @@ import org.example.model.PlacedFigure;
 import org.example.model.tetris.ISolver;
 import org.example.model.tetris.TPlanet;
 import org.example.model.tetris.TShipBaggage;
+import org.example.service.UtilService;
 import org.example.stress.generator.figure.FigureGenerator;
 import org.example.stress.generator.figure.SnakeFigureGenerator;
 import org.example.stress.validator.ContainsSuchFigureValidator;
@@ -19,7 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class StressTest {
-    private static final FigureGenerator FIGURE_GENERATOR = new SnakeFigureGenerator(10, false);
+    private static final FigureGenerator FIGURE_GENERATOR = new SnakeFigureGenerator(10, true);
     private static final FigureVisualizer FIGURE_VISUALIZER = new ConsoleFigureVisualizer();
 
     private static final ShipVisualizer SHIP_VISUALIZER = new ConsoleShipVisualizer();
@@ -29,9 +30,11 @@ public class StressTest {
             new ContainsSuchFigureValidator()
     );
 
+    private static final UtilService utilService = UtilService.getInstance();
+
     private static void testCase() {
-        int w = 10;
-        int h = 10;
+        int w = 4;
+        int h = 4;
         int figuresCount = 10;
         System.out.println("FIGURES:");
         Map<String, Figure> figureMap = new HashMap<>();
@@ -65,7 +68,8 @@ public class StressTest {
 
 
             System.out.println("SOLVER #" + i);
-            System.out.println("FIGURES PLACED: " + placedFigures.size());
+            System.out.println("FIGURES PLACED: " + placedFigures.size() + " OUT OF " + figureMap.size());
+            System.out.println("FILL PERCENTAGE: " + utilService.calcFillPercentage(placedFigures, w, h));
             System.out.println("PLACEMENT:");
             SHIP_VISUALIZER.visualize(placedFigures, w, h);
             System.out.println("-------------------------");
