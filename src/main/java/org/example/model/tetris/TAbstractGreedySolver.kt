@@ -37,20 +37,10 @@ class TAbstractGreedySolver(val priorityFunc: (Int, Int, Int, Int, Int) -> Doubl
 
     override fun findOptimalLoad(currentBaggage: IShipBaggage,
                                  garbage: MutableMap<String, Figure>): MutableList<PlacedFigure> {
-        val sortedGarbage = garbage.map { (k, v) -> PlacedFigure(v, k) }.sortedBy { pf -> getPriority(pf) }
+        val allGarbage = garbage.map { (k, v) -> PlacedFigure(v, k) } + currentBaggage.load
+        val sortedGarbage = allGarbage.sortedBy { pf -> getPriority(pf) }
         val grid = Grid(currentBaggage.capacityX, currentBaggage.capacityY)
         val result = ArrayList<PlacedFigure>()
-        for (pf in currentBaggage.load) {
-            val figure = findTransformation(currentBaggage, pf, grid)
-            if (figure != null) {
-                for (coord in figure.coords) {
-                    grid.setCell(coord[0], coord[1], pf.name)
-                }
-                result.add(PlacedFigure(figure, pf.name))
-            } else {
-                return ArrayList()  // Bad
-            }
-        }
         sortedGarbage.forEach { pf ->
             val figure = findTransformation(currentBaggage, pf, grid)
             if (figure != null) {
