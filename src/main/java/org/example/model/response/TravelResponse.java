@@ -9,6 +9,8 @@ import java.util.Map;
 public class TravelResponse {
     private Map<String, Figure> planetGarbage;
 
+    private Map<String, Figure> shipGarbage;
+
     public Map<String, Figure> getPlanetGarbage() {
         return planetGarbage;
     }
@@ -17,6 +19,17 @@ public class TravelResponse {
         this.planetGarbage = new HashMap<>();
         for (var gi : planetGarbage.entrySet()) {
             this.planetGarbage.put(gi.getKey(), new Figure(gi.getValue()));
+        }
+    }
+
+    public Map<String, Figure> getShipGarbage() {
+        return shipGarbage;
+    }
+
+    public void setShipGarbage(Map<String, List<List<Integer>>> shipGarbage) {
+        this.shipGarbage = new HashMap<>();
+        for (var gi : shipGarbage.entrySet()) {
+            this.shipGarbage.put(gi.getKey(), new Figure(gi.getValue()));
         }
     }
 }

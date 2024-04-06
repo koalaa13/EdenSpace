@@ -1,5 +1,6 @@
 package org.example.api;
 
+import org.example.model.Figure;
 import org.example.model.PlacedFigure;
 import org.example.model.PlanetInfo;
 import org.example.model.graph.Graph;
@@ -10,6 +11,7 @@ import org.example.model.tetris.TShipBaggage;
 import org.example.service.UtilService;
 
 import java.util.List;
+import java.util.Map;
 
 public class JsonImpl implements IJson {
     private final UtilService utilService;
@@ -20,6 +22,14 @@ public class JsonImpl implements IJson {
         utilService = UtilService.getInstance();
     }
 
+    private List<PlacedFigure> getPlacedFiguresFromResponse(Map<String, Figure> figureMap) {
+        return figureMap.entrySet()
+                .stream()
+                .map(e ->
+                        new PlacedFigure(e.getValue(), e.getKey())
+                )
+                .toList();
+    }
 
     @Override
     public GameInfo getGameInfo() {
@@ -30,26 +40,21 @@ public class JsonImpl implements IJson {
                 infoResponse.getShip().getCapacityX(),
                 infoResponse.getShip().getCapacityY()
         );
-        List<PlacedFigure> placedFigures = infoResponse.getShip()
-                .getGarbage()
-                .entrySet()
-                .stream()
-                .map(e ->
-                        new PlacedFigure(e.getValue(), e.getKey())
-                )
-                .toList();
+        List<PlacedFigure> placedFigures = getPlacedFiguresFromResponse(infoResponse.getShip().getGarbage());
         shipBaggage.setLoad(placedFigures);
 
         return new GameInfo(graph, shipBaggage);
     }
 
     @Override
-    public PlanetInfo move(List<String> trajectory) {
+    public MoveInfo move(List<String> trajectory) {
         TravelResponse travelResponse = apiController.travelRequest(trajectory);
         // Имя планеты -- это место назначения
         String name = trajectory.get(trajectory.size() - 1);
 
-        return new PlanetInfo(name, travelResponse.getPlanetGarbage());
+        PlanetInfo planetInfo = new PlanetInfo(name, travelResponse.getPlanetGarbage());
+
+        return new MoveInfo(planetInfo, getPlacedFiguresFromResponse(travelResponse.getShipGarbage()));
     }
 
     @Override
