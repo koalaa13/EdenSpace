@@ -8,6 +8,15 @@ import static java.lang.Math.min;
 public class Figure {
     private final int[][] coords;
 
+    public Figure(Figure other) {
+        int n = other.coords.length;
+        this.coords = new int[n][2];
+        for (int i = 0; i < n; ++i) {
+            this.coords[i][0] = other.coords[i][0];
+            this.coords[i][1] = other.coords[i][1];
+        }
+    }
+
     public Figure(int[][] coords) {
         this.coords = coords;
     }

@@ -7,6 +7,7 @@ import org.example.model.tetris.TPlanet;
 import org.example.model.tetris.TShipBaggage;
 import org.example.stress.generator.figure.FigureGenerator;
 import org.example.stress.generator.figure.SnakeFigureGenerator;
+import org.example.stress.validator.ContainsSuchFigureValidator;
 import org.example.stress.validator.OverlayTetrisValidator;
 import org.example.stress.validator.TetrisValidator;
 import org.example.visual.figure.ConsoleFigureVisualizer;
@@ -24,7 +25,8 @@ public class StressTest {
     private static final ShipVisualizer SHIP_VISUALIZER = new ConsoleShipVisualizer();
 
     private static final List<TetrisValidator> VALIDATORS = List.of(
-            new OverlayTetrisValidator()
+            new OverlayTetrisValidator(),
+            new ContainsSuchFigureValidator()
     );
 
     private static void testCase() {
@@ -37,6 +39,7 @@ public class StressTest {
             Figure figure = FIGURE_GENERATOR.generateFigure(w, h);
             String name = UUID.randomUUID().toString();
             figureMap.put(name, figure);
+            System.out.printf("FIGURE %s%n", name);
             FIGURE_VISUALIZER.visualize(figure);
             System.out.println("----------------------");
         }
@@ -78,10 +81,10 @@ public class StressTest {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        for (int t = 0; t < 1; ++t) {
+        for (int t = 0;; ++t) {
             System.out.println("TESTCASE #" + t);
             testCase();
-//            Thread.sleep();
+            Thread.sleep(1000);
         }
     }
 }
