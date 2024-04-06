@@ -37,11 +37,16 @@ public class ApiController {
         this.objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
+    private static final String GAME_ENDED_MESSAGE = "you have already completed the game";
+
     private <T> T responseHandling(HttpResponse response, Class<? extends T> okResponseClass) throws IOException {
         var content = response.getEntity().getContent();
         if (response.getStatusLine().getStatusCode() != 200) {
             String errorMessage = objectMapper.readTree(content).get("error").asText();
             System.err.println(errorMessage);
+            if (GAME_ENDED_MESSAGE.equals(errorMessage)) {
+                System.exit(0);
+            }
             return null;
         }
         return objectMapper.readValue(content, okResponseClass);
