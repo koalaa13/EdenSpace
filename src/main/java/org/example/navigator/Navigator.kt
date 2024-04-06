@@ -24,8 +24,8 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
             ?.first
 
         if (unexploredPlanet != null) {
-            if (baggage.freeSpace.toDouble() / baggage.area > 0.49 &&
-                baggage.loadConvexHullArea.toDouble() / baggage.area < 0.51
+            if (baggage.freeSpace.toDouble() / baggage.area > 0.7 &&
+                baggage.loadConvexHullArea.toDouble() / baggage.area < 0.3
             ) {
                 return listOf(unexploredPlanet)
             }
@@ -39,8 +39,8 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
 
         return when {
             bestKnownPlanet != null && bestKnownPlanet.second.getHowManyCanAdd(baggage) > 0 -> {
-                if (bestKnownPlanet.first != currentPlanet && baggage.freeSpace.toDouble() / baggage.area > 0.49 &&
-                    baggage.loadConvexHullArea.toDouble() / baggage.area < 0.51
+                if (bestKnownPlanet.first != currentPlanet && baggage.freeSpace.toDouble() / baggage.area > 0.7 &&
+                    baggage.loadConvexHullArea.toDouble() / baggage.area < 0.3
                 ) {
                     listOf(bestKnownPlanet.first)
                 } else {
