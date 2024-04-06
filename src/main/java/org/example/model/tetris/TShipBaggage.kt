@@ -14,6 +14,10 @@ class TShipBaggage(private val capacityX: Int, private val capacityY: Int) : ISh
 
     override fun getCapacityY(): Int = capacityY
 
+    override fun getFreeSpace(): Int {
+        return capacityX * capacityY - placedFigures.sumOf { it.figure.coords.size }
+    }
+
     override fun clean() {
         placedFigures = ArrayList()
     }

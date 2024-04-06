@@ -15,6 +15,9 @@ public interface IShipBaggage {
 
     int getCapacityY();
 
+    // Возвращает число пустых клеточек
+    int getFreeSpace();
+
     // Полностью очищает мусор внутри корабля
     void clean();
 }
