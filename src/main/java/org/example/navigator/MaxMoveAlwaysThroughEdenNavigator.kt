@@ -23,6 +23,12 @@ class MaxMoveAlwaysThroughEdenNavigator(graph: Graph) : AbstractNavigator(graph)
             ?.first
 
         if (unexploredPlanet != null) {
+            if (baggage.freeSpace.toDouble() / baggage.area > 0.3 &&
+                baggage.loadConvexHullArea.toDouble() / baggage.area < 0.8
+            ) {
+                return listOf(unexploredPlanet)
+            }
+
             return listOf(EDEN, unexploredPlanet)
         }
 

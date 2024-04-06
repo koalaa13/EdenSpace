@@ -15,8 +15,14 @@ public interface IShipBaggage {
 
     int getCapacityY();
 
+    // Возвращает площадь (пустого) багажа
+    int getArea();
+
     // Возвращает число пустых клеточек
     int getFreeSpace();
+
+    // Возвращает размер прямоугольника, являющегося выпуклой оболочкой мусора внутри
+    int getLoadConvexHullArea();
 
     // Полностью очищает мусор внутри корабля
     void clean();

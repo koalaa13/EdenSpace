@@ -14,8 +14,23 @@ class TShipBaggage(private val capacityX: Int, private val capacityY: Int) : ISh
 
     override fun getCapacityY(): Int = capacityY
 
+    override fun getArea() = capacityX * capacityY
+
     override fun getFreeSpace(): Int {
-        return capacityX * capacityY - placedFigures.sumOf { it.figure.coords.size }
+        return area - placedFigures.sumOf { it.figure.coords.size }
+    }
+
+    override fun getLoadConvexHullArea(): Int {
+        if (placedFigures.isEmpty()) {
+            return 0
+        }
+
+        val minX = placedFigures.minOf { it.figure.coords.minOf { it[0] } }
+        val maxX = placedFigures.maxOf { it.figure.coords.maxOf { it[0] } }
+        val minY = placedFigures.minOf { it.figure.coords.minOf { it[1] } }
+        val maxY = placedFigures.maxOf { it.figure.coords.maxOf { it[1] } }
+
+        return (maxX - minX) * (maxY - minY)
     }
 
     override fun clean() {

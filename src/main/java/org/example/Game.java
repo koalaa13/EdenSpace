@@ -15,7 +15,7 @@ public class Game {
     }
 
     public static void playFake() throws Exception {
-        playWithJson(FakeJsons.INSTANCE.get2());
+        playWithJson(FakeJsons.INSTANCE.get1());
     }
 
     private static void playWithJson(IJson json) throws Exception {
