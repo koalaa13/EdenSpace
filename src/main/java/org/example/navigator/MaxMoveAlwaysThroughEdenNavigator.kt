@@ -10,8 +10,11 @@ import org.example.navigator.shortestpath.DijkstraFuelNumberOfEdges
 private const val EDEN = "Eden"
 private const val EARTH = "Earth"
 
-
-class Navigator(private val graph: Graph) : INavigator {
+/*
+Сначала посещает все планеты по одному разу, затем летает на ту, с которой можно вывезти больше всего мусора.
+Всегда летает через Eden
+*/
+class MaxMoveAlwaysThroughEdenNavigator(private val graph: Graph) : INavigator {
     private val planetNames = DijkstraFuelNumberOfEdges(EARTH, graph).getReachable()
 
     /*
@@ -19,22 +22,7 @@ class Navigator(private val graph: Graph) : INavigator {
     */
     private val knownPlanets = mutableMapOf<String, IPlanet>()
 
-    override fun getMove(currentPlanet: String, baggage: IShipBaggage): List<String>? {
-        val bestKnownPlanet = knownPlanets.maxByOrNull { it.value.getHowManyCanAdd(baggage) }
-        val unexploredPlanet = planetNames.firstOrNull {
-            it !in knownPlanets && it !in setOf(EDEN, EARTH)
-        }
-
-        val wantKnown = bestKnownPlanet != null && bestKnownPlanet.value.getHowManyCanAdd(baggage) > 0
-        val wantUnexplored = unexploredPlanet != null
-
-        val destination = when {
-            wantUnexplored -> unexploredPlanet!!
-            wantKnown -> bestKnownPlanet!!.key
-            currentPlanet != EDEN -> EDEN
-            else -> return null
-        }
-
+    private fun buildPath(currentPlanet: String, destination: String): List<String> {
         val currentPlanetShortestPaths = DijkstraFuelNumberOfEdges(currentPlanet, graph)
         if (destination == EDEN) {
             return currentPlanetShortestPaths.getIntermediate(EDEN) + EDEN
@@ -45,6 +33,24 @@ class Navigator(private val graph: Graph) : INavigator {
                 EDEN +
                 edenPlanetShortestPaths.getIntermediate(destination) +
                 destination
+    }
+
+    override fun getMove(currentPlanet: String, baggage: IShipBaggage): List<String>? {
+        val unexploredPlanet = planetNames.firstOrNull {
+            it !in knownPlanets && it !in setOf(EDEN, EARTH)
+        }
+        if (unexploredPlanet != null) {
+            return buildPath(currentPlanet, unexploredPlanet)
+        }
+
+        val bestKnownPlanet = knownPlanets.maxByOrNull { it.value.getHowManyCanAdd(baggage) }
+
+        val destination = when {
+            bestKnownPlanet != null && bestKnownPlanet.value.getHowManyCanAdd(baggage) > 0 -> bestKnownPlanet.key
+            currentPlanet != EDEN -> EDEN
+            else -> return null
+        }
+        return buildPath(currentPlanet, destination)
     }
 
     override fun setPlanetGarbage(planetName: String, garbage: Map<String, Figure>): IPlanet {
