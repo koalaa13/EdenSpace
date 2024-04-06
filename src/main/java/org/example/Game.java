@@ -43,8 +43,7 @@ public class Game {
             var planetInfo = moveInfo.getPlanetInfo();
             System.out.println("Planet: " + planetInfo.getName());
             System.out.println("Current load");
-            shipVisualizer.visualize(moveInfo.getShipLoad(),
-                    shipBaggage.getCapacityX(), shipBaggage.getCapacityY());
+            shipVisualizer.visualize(moveInfo.getShipLoad(), shipBaggage.getCapacityX(), shipBaggage.getCapacityY());
             shipBaggage.setLoad(moveInfo.getShipLoad());
             currentPlanet = planetInfo.getName();
             var planet = navigator.setPlanetGarbage(currentPlanet, planetInfo.getGarbage());
@@ -52,7 +51,9 @@ public class Game {
             System.out.println("New load");
             shipVisualizer.visualize(shipBaggage.getLoad(), shipBaggage.getCapacityX(), shipBaggage.getCapacityY());
             json.load(shipBaggage.getLoad());
-            shipBaggage.clean();
+            if (move.contains("Eden")) {
+                shipBaggage.clean();
+            }
             System.out.println("Ship is cleaned");
             Thread.sleep(1000);
         }
