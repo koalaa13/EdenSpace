@@ -114,7 +114,6 @@ class FivePlanetsBambooFakeJson : IJson {
         println("[fake] load:")
         shipVisualizer.visualize(newGarbage, CAPACITY_X, CAPACITY_Y)
 
-        require(currentPlanet != EDEN)
         for (figure in existingFigures.values) {
             if (figure.location == SHIP) {
                 figure.location = currentPlanet

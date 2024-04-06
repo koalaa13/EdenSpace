@@ -31,12 +31,16 @@ class Navigator(private val graph: Graph) : INavigator {
         val destination = when {
             wantUnexplored -> unexploredPlanet!!
             wantKnown -> bestKnownPlanet!!.key
+            currentPlanet != EDEN -> EDEN
             else -> return null
         }
 
         val currentPlanetShortestPaths = DijkstraFuelNumberOfEdges(currentPlanet, graph)
-        val edenPlanetShortestPaths = DijkstraFuelNumberOfEdges(EDEN, graph)
+        if (destination == EDEN) {
+            return currentPlanetShortestPaths.getIntermediate(EDEN) + EDEN
+        }
 
+        val edenPlanetShortestPaths = DijkstraFuelNumberOfEdges(EDEN, graph)
         return currentPlanetShortestPaths.getIntermediate(EDEN) +
                 EDEN +
                 edenPlanetShortestPaths.getIntermediate(destination) +
