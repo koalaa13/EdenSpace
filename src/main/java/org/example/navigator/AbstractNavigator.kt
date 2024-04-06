@@ -6,6 +6,7 @@ import org.example.model.tetris.IPlanet
 import org.example.model.tetris.IShipBaggage
 import org.example.model.tetris.TPlanet
 import org.example.navigator.shortestpath.BfsNumberOfEdges
+import org.example.navigator.shortestpath.DijkstraFuelNumberOfEdges
 import org.example.navigator.shortestpath.ShortestPath
 
 private const val EDEN = "Eden"
@@ -18,17 +19,17 @@ abstract class AbstractNavigator(protected val graph: Graph) : INavigator {
     */
     protected val knownPlanets = mutableMapOf<String, IPlanet>()
 
-    protected abstract fun getPlanetsToVisit(currentPlanet: String, baggage: IShipBaggage): List<String>?
+    protected abstract fun getPlanetsToVisit(currentPlanet: String, baggage: IShipBaggage, i: Int): List<String>?
 
-    protected abstract fun buildShortestPaths(origin: String): ShortestPath<*>
+    protected abstract fun buildShortestPaths(origin: String, i: Int): ShortestPath<*>
 
-    override fun getMove(currentPlanet: String, baggage: IShipBaggage): List<String>? {
-        val planetsToVisit = getPlanetsToVisit(currentPlanet, baggage) ?: return null
+    override fun getMove(currentPlanet: String, baggage: IShipBaggage, it: Int): List<String>? {
+        val planetsToVisit = getPlanetsToVisit(currentPlanet, baggage, it) ?: return null
         println("From $currentPlanet want to visit ${planetsToVisit.joinToString()}")
         return buildList {
             var currentPlanet = currentPlanet
             for (next in planetsToVisit) {
-                val trajectory = buildShortestPaths(currentPlanet).getIntermediate(next) + next
+                val trajectory = buildShortestPaths(currentPlanet, it).getIntermediate(next) + next
                 graph.getEdgesFrom(currentPlanet)[trajectory[0]] =
                     graph.getEdgesFrom(currentPlanet)[trajectory[0]]!! + 10
                 for (i in 1 until trajectory.size) {

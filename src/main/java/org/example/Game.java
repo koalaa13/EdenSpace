@@ -38,7 +38,7 @@ public class Game {
         while (true) {
             System.out.println("New move: " + ++it);
             System.out.println("Current planet: " + currentPlanet);
-            var move = navigator.getMove(currentPlanet, shipBaggage);
+            var move = navigator.getMove(currentPlanet, shipBaggage, it);
             if (move == null) {
                 System.out.println("Move not found");
                 return;
@@ -57,7 +57,7 @@ public class Game {
             System.out.println("$ New load");
             shipVisualizer.visualize(shipBaggage.getLoad(), shipBaggage.getCapacityX(), shipBaggage.getCapacityY());
             json.load(shipBaggage.getLoad());
-            Thread.sleep(1000);
+            Thread.sleep(400);
         }
     }
 }

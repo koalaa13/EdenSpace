@@ -10,7 +10,7 @@ import java.util.Map;
 // Хранит IPlanet объекты, чтобы решать куда лететь
 public interface INavigator {
     // Возвращает ход перемещения, который сейчас надо сделать с заданным имеющимся багажом
-    List<String> getMove(String currentPlanet, IShipBaggage baggage);
+    List<String> getMove(String currentPlanet, IShipBaggage baggage, int it);
 
     // Обновляет информацию о том какой мусор лежит на планете и возвращает ее
     IPlanet setPlanetGarbage(String planet, Map<String, Figure> garbage);
