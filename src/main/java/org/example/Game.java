@@ -43,7 +43,7 @@ public class Game {
             var planetInfo = moveInfo.getPlanetInfo();
             System.out.println("Planet: " + planetInfo.getName());
             System.out.println("Current load");
-            shipVisualizer.visualize(planetInfo.getGarbageAsList(),
+            shipVisualizer.visualize(moveInfo.getShipLoad(),
                     shipBaggage.getCapacityX(), shipBaggage.getCapacityY());
             shipBaggage.setLoad(moveInfo.getShipLoad());
             currentPlanet = planetInfo.getName();
