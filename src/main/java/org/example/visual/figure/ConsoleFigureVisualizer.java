@@ -14,9 +14,9 @@ public class ConsoleFigureVisualizer implements FigureVisualizer {
         for (int i = 0; i < maxY; ++i) {
             for (int j = 0; j < maxX; ++j) {
                 if (print[i][j]) {
-                    System.out.print('*');
+                    System.out.print("\u001B[31m" + '⬛' + "\u001B[0m");
                 } else {
-                    System.out.print('.');
+                    System.out.print('⬜');
                 }
             }
             System.out.println();
