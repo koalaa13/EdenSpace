@@ -2,6 +2,7 @@ package org.example.navigator
 
 import org.example.model.graph.Graph
 import org.example.model.tetris.IShipBaggage
+import org.example.model.tetris.TShipBaggage
 import org.example.navigator.shortestpath.DijkstraFuelNumberOfEdges
 
 private const val EDEN = "Eden"
@@ -33,23 +34,29 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
             return listOf(EDEN, unexploredPlanet)
         }
 
-        val bestKnownPlanet = knownPlanets
-            .map { Triple(it.key, it.value, it.value.getHowManyCanAdd(baggage)) }
-            .maxByOrNull { it.third }
+        if (baggage.freeSpace.toDouble() / baggage.area > 1 &&
+            baggage.loadConvexHullArea.toDouble() / baggage.area < 0
+        ) {
+            val nearestKnownPlanet = knownPlanets
+                .filter { it.value.howMuchCanFillPercentage(baggage) >= 0.1 }
+                .map { Triple(it.key, it.value, shortestPath.distanceTo[it.key]!!) }
+                .minByOrNull { it.third }
+                ?.first
 
-        return when {
-            bestKnownPlanet != null && bestKnownPlanet.second.getHowManyCanAdd(baggage) > 0 -> {
-                if (bestKnownPlanet.first != currentPlanet && baggage.freeSpace.toDouble() / baggage.area > 1 &&
-                    baggage.loadConvexHullArea.toDouble() / baggage.area < 0
-                ) {
-                    listOf(bestKnownPlanet.first)
-                } else {
-                    listOf(EDEN, bestKnownPlanet.first)
-                }
+            if (nearestKnownPlanet != null) {
+                return listOf(nearestKnownPlanet)
             }
+        } else {
+            val emptyBaggage = TShipBaggage(baggage.capacityX, baggage.capacityY)
+            val bestKnownPlanet = knownPlanets
+                .map { Triple(it.key, it.value, it.value.getHowManyCanAdd(emptyBaggage)) }
+                .maxByOrNull { it.third }
 
-            currentPlanet != EDEN -> listOf(EDEN)
-            else -> null
+            if (bestKnownPlanet != null && bestKnownPlanet.third > 0) {
+                return listOf(EDEN, bestKnownPlanet.first)
+            }
         }
+
+        return null
     }
 }
