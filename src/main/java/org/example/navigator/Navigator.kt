@@ -15,6 +15,7 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
     override fun buildShortestPaths(origin: String) = DijkstraFuelNumberOfEdges(origin, graph)
 
     override fun getPlanetsToVisit(currentPlanet: String, baggage: IShipBaggage): List<String>? {
+        println("baggage stats: ${baggage.freeSpace.toDouble() / baggage.area} ${baggage.loadConvexHullArea.toDouble() / baggage.area}")
         val shortestPath = buildShortestPaths(currentPlanet)
         val unexploredPlanet = (planetNames - knownPlanets.keys - setOf(EDEN, EARTH, currentPlanet))
             .map { it to shortestPath.distanceTo[it] }
@@ -23,8 +24,8 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
             ?.first
 
         if (unexploredPlanet != null) {
-            if (baggage.freeSpace.toDouble() / baggage.area > 0.49 &&
-                baggage.loadConvexHullArea.toDouble() / baggage.area < 0.51
+            if (baggage.freeSpace.toDouble() / baggage.area > 0.7 &&
+                baggage.loadConvexHullArea.toDouble() / baggage.area < 0.3
             ) {
                 return listOf(unexploredPlanet)
             }
@@ -38,8 +39,8 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
 
         return when {
             bestKnownPlanet != null && bestKnownPlanet.second.getHowManyCanAdd(baggage) > 0 -> {
-                if (bestKnownPlanet.first != currentPlanet && baggage.freeSpace.toDouble() / baggage.area > 0.49 &&
-                    baggage.loadConvexHullArea.toDouble() / baggage.area < 0.51
+                if (bestKnownPlanet.first != currentPlanet && baggage.freeSpace.toDouble() / baggage.area > 0.7 &&
+                    baggage.loadConvexHullArea.toDouble() / baggage.area < 0.3
                 ) {
                     listOf(bestKnownPlanet.first)
                 } else {
