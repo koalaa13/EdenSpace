@@ -1,16 +1,17 @@
 package org.example.navigator.shortestpath
 
 interface ShortestPath<T> {
-    fun getDistanceTo(destination: String): T?
-    fun getLastOnPathTo(destination: String): String?
-    fun getReachable(): Set<String>
+    val distanceTo: Map<String, T?>
+    val lastOnPathTo: Map<String, String?>
+
+    fun getReachable(): Set<String> = distanceTo.keys
 
     fun getIntermediate(to: String): List<String> =
         buildList {
-            var current = getLastOnPathTo(to)
+            var current = lastOnPathTo[to]
             while (current != null) {
                 add(current)
-                current = getLastOnPathTo(current)
+                current = lastOnPathTo[current]
             }
         }.dropLast(1).reversed()
 }

@@ -17,13 +17,11 @@ class DijkstraFuelNumberOfEdges(private val origin: String, graph: Graph) :
     }
 
 
-    private val distanceTo: Map<String, Distance>
-    private val lastOnPathTo: Map<String, String>
+    override val distanceTo: Map<String, Distance>
+    override val lastOnPathTo: Map<String, String>
 
     init {
-        distanceTo = mutableMapOf<String, Distance>().apply {
-            put(origin, Distance(0, 0))
-        }
+        distanceTo = mutableMapOf(origin to Distance(0, 0))
         lastOnPathTo = mutableMapOf()
         val heap: TreeSet<Pair<Distance, String>> =
             TreeSet<Pair<Distance, String>> { p1, p2 ->
@@ -51,10 +49,4 @@ class DijkstraFuelNumberOfEdges(private val origin: String, graph: Graph) :
             }
         }
     }
-
-    override fun getDistanceTo(destination: String) = distanceTo[destination]
-
-    override fun getLastOnPathTo(destination: String) = lastOnPathTo[destination]
-
-    override fun getReachable() = distanceTo.keys
 }
