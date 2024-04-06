@@ -15,6 +15,7 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
     override fun buildShortestPaths(origin: String) = DijkstraFuelNumberOfEdges(origin, graph)
 
     override fun getPlanetsToVisit(currentPlanet: String, baggage: IShipBaggage): List<String>? {
+        println("baggage stats: ${baggage.freeSpace.toDouble() / baggage.area} ${baggage.loadConvexHullArea.toDouble() / baggage.area}")
         val shortestPath = buildShortestPaths(currentPlanet)
         val unexploredPlanet = (planetNames - knownPlanets.keys - setOf(EDEN, EARTH, currentPlanet))
             .map { it to shortestPath.distanceTo[it] }
