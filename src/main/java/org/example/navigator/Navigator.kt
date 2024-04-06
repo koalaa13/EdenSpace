@@ -16,7 +16,7 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
 
     override fun getPlanetsToVisit(currentPlanet: String, baggage: IShipBaggage): List<String>? {
         val shortestPath = buildShortestPaths(currentPlanet)
-        val unexploredPlanet = (planetNames - knownPlanets.keys - setOf(EDEN, EARTH))
+        val unexploredPlanet = (planetNames - knownPlanets.keys - setOf(EDEN, EARTH, currentPlanet))
             .map { it to shortestPath.distanceTo[it] }
             .filter { it.second != null }
             .minByOrNull { it.second!! }
