@@ -18,6 +18,9 @@ class TPlanet : IPlanet {
             TAbstractGreedySolver { sz, minX, maxX, minY, maxY ->
                 sz.toDouble() / ((maxY - minY) * (maxX - minX))
             },  // By density
+            TAbstractGreedySolver { sz, minX, maxX, minY, maxY ->
+                sz.toDouble()
+            },  // By size
             TAbstractGreedySolver { _, minX, maxX, minY, maxY ->
                 -(maxY - minY + maxX - minX).toDouble()
             },  // From big to small
@@ -26,6 +29,9 @@ class TPlanet : IPlanet {
             },
             TAbstractGreedySolver { sz, minX, maxX, minY, maxY ->
                 -sz.toDouble() / ((maxY - minY) * (maxX - minX))
+            },
+            TAbstractGreedySolver { sz, minX, maxX, minY, maxY ->
+                -sz.toDouble()
             },
         )
 
@@ -37,7 +43,7 @@ class TPlanet : IPlanet {
     private fun findOptimalLoad(currentBaggage: IShipBaggage): MutableList<PlacedFigure> {
         return solvers
             .map { solver -> solver.findOptimalLoad(currentBaggage, garbage) }
-            .maxBy { pfs -> pfs.size }
+            .maxBy { pfs -> UtilService.getInstance().calcFillPercentage(pfs, currentBaggage.capacityX, currentBaggage.capacityY) }
     }
 
     override fun getHowManyCanAdd(baggage: IShipBaggage): Int {
