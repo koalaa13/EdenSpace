@@ -35,15 +35,15 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
 //        if (baggage.freeSpace.toDouble() / baggage.area > 0.8 &&
 //            baggage.loadConvexHullArea.toDouble() / baggage.area < 0.2
 //        ) {
-            val nearestKnownPlanet = knownPlanets
-                .filter { it.value.howMuchCanFillPercentage(baggage) >= 0.1 }
-                .map { Triple(it.key, it.value, shortestPath.distanceTo[it.key]!!) }
-                .minByOrNull { it.third }
-                ?.first
+        val nearestKnownPlanet = knownPlanets
+            .filter { it.value.howMuchCanFillPercentage(baggage) >= 0.1 }
+            .map { Triple(it.key, it.value, shortestPath.distanceTo[it.key]!!) }
+            .minByOrNull { it.third }
+            ?.first
 
-            if (nearestKnownPlanet != null) {
-                return listOf(nearestKnownPlanet)
-            }
+        if (nearestKnownPlanet != null) {
+            return listOf(nearestKnownPlanet)
+        }
 //        }
 
         val emptyBaggage = TShipBaggage(baggage.capacityX, baggage.capacityY)
@@ -56,6 +56,14 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
 
         if (nearestToEdenKnownPlanet != null) {
             return listOf(EDEN, nearestToEdenKnownPlanet)
+        }
+
+        val bestKnownPlanet = knownPlanets
+            .map { Triple(it.key, it.value, it.value.getHowManyCanAdd(emptyBaggage)) }
+            .maxByOrNull { it.third }
+
+        if (bestKnownPlanet != null && bestKnownPlanet.third > 0) {
+            return listOf(EDEN, bestKnownPlanet.first)
         }
 
         if (currentPlanet != EDEN) {
