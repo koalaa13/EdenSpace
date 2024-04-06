@@ -38,18 +38,13 @@ public class ApiController {
     }
 
     private <T> T responseHandling(HttpResponse response, Class<? extends T> okResponseClass) throws IOException {
-        try {
-            var content = response.getEntity().getContent();
-            if (response.getStatusLine().getStatusCode() != 200) {
-                String errorMessage = objectMapper.readTree(content).get("error").asText();
-                System.err.println(errorMessage);
-                return null;
-            }
-            return objectMapper.readValue(content, okResponseClass);
-        } catch (Exception e) {
-            System.err.println(e);
+        var content = response.getEntity().getContent();
+        if (response.getStatusLine().getStatusCode() != 200) {
+            String errorMessage = objectMapper.readTree(content).get("error").asText();
+            System.err.println(errorMessage);
+            return null;
         }
-        return null;
+        return objectMapper.readValue(content, okResponseClass);
     }
 
     public InfoResponse infoRequest() {
@@ -62,7 +57,7 @@ public class ApiController {
                     request,
                     response -> responseHandling(response, InfoResponse.class)
             );
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println(e);
         }
         return infoResponse;
@@ -72,10 +67,12 @@ public class ApiController {
 
     public TravelResponse travelRequest(List<String> planetsPath) {
         TravelResponse travelResponse = null;
+        String bbody = null;
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             final Map<String, List<String>> body = new HashMap<>();
             body.put(TRAVEL_PLANETS_BODY_KEY, planetsPath);
             final String json = objectMapper.writeValueAsString(body);
+            bbody = json;
             final StringEntity entity = new StringEntity(json);
 
             HttpPost request = new HttpPost(API_URL + "/travel");
@@ -86,8 +83,9 @@ public class ApiController {
                     request,
                     response -> responseHandling(response, TravelResponse.class)
             );
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println(e);
+            System.err.println(bbody);
         }
         return travelResponse;
     }
