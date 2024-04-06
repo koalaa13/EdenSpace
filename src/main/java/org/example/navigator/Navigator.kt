@@ -25,8 +25,8 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
             ?.first
 
         if (unexploredPlanet != null) {
-            if (baggage.freeSpace.toDouble() / baggage.area > 1 &&
-                baggage.loadConvexHullArea.toDouble() / baggage.area < 0
+            if (baggage.freeSpace.toDouble() / baggage.area > 0.8 &&
+                baggage.loadConvexHullArea.toDouble() / baggage.area < 0.2
             ) {
                 return listOf(unexploredPlanet)
             }
@@ -34,8 +34,8 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
             return listOf(EDEN, unexploredPlanet)
         }
 
-        if (baggage.freeSpace.toDouble() / baggage.area > 1 &&
-            baggage.loadConvexHullArea.toDouble() / baggage.area < 0
+        if (baggage.freeSpace.toDouble() / baggage.area > 0.8 &&
+            baggage.loadConvexHullArea.toDouble() / baggage.area < 0.2
         ) {
             val nearestKnownPlanet = knownPlanets
                 .filter { it.value.howMuchCanFillPercentage(baggage) >= 0.1 }
@@ -46,15 +46,19 @@ class Navigator(graph: Graph) : AbstractNavigator(graph) {
             if (nearestKnownPlanet != null) {
                 return listOf(nearestKnownPlanet)
             }
-        } else {
-            val emptyBaggage = TShipBaggage(baggage.capacityX, baggage.capacityY)
-            val bestKnownPlanet = knownPlanets
-                .map { Triple(it.key, it.value, it.value.getHowManyCanAdd(emptyBaggage)) }
-                .maxByOrNull { it.third }
+        }
 
-            if (bestKnownPlanet != null && bestKnownPlanet.third > 0) {
-                return listOf(EDEN, bestKnownPlanet.first)
-            }
+        val emptyBaggage = TShipBaggage(baggage.capacityX, baggage.capacityY)
+        val bestKnownPlanet = knownPlanets
+            .map { Triple(it.key, it.value, it.value.getHowManyCanAdd(emptyBaggage)) }
+            .maxByOrNull { it.third }
+
+        if (bestKnownPlanet != null && bestKnownPlanet.third > 0) {
+            return listOf(EDEN, bestKnownPlanet.first)
+        }
+
+        if (currentPlanet != EDEN) {
+            return listOf(EDEN)
         }
 
         return null
