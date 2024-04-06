@@ -24,6 +24,7 @@ abstract class AbstractNavigator(protected val graph: Graph) : INavigator {
 
     override fun getMove(currentPlanet: String, baggage: IShipBaggage): List<String>? {
         val planetsToVisit = getPlanetsToVisit(currentPlanet, baggage) ?: return null
+        println("From $currentPlanet want to visit ${planetsToVisit.joinToString()}")
         return buildList {
             var currentPlanet = currentPlanet
             for (next in planetsToVisit) {
