@@ -2,13 +2,12 @@ package org.example.visual.graph;
 
 import kotlin.Pair;
 import org.example.model.graph.Graph;
+import org.example.service.UtilService;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 public class FXGraphVisualizer extends JFrame implements GraphVisualizer {
     private double zoom = 1.0;
@@ -32,13 +31,16 @@ public class FXGraphVisualizer extends JFrame implements GraphVisualizer {
     @Override
     public void visualize(Graph graph, String current, List<String> path) {
         this.graph = graph;
-        this.nodes = graph.getAllEdges().keySet().stream().toList(); // TODO: Switch to another way
+        this.nodes = UtilService.getInstance().getPlanetsOrder(graph); // TODO: Switch to another way
+        assert this.nodes.size() == graph.getVertexesCount();
         this.name2idx = new HashMap<>();
         for (int i = 0; i < this.nodes.size(); ++i) {
             this.name2idx.put(this.nodes.get(i), i);
         }
         this.currentNode = current;
-        this.path = path;
+        this.path = new ArrayList<>();
+        this.path.add(currentNode);
+        this.path.addAll(path);
         repaint();
     }
 
@@ -82,29 +84,36 @@ public class FXGraphVisualizer extends JFrame implements GraphVisualizer {
         var allEdges = graph.getAllEdges();
         var count = allEdges.size();
         g.setColor(new Color(20, 20, 20));
-        g.setFont(new Font("Bold", 1, 8));
+        g.setFont(new Font("Bold", 1, 6));
+        List<String> specialNodes = new ArrayList<>(List.of("Eden", "Earth"));
+        if (path.size() > 0) {
+            specialNodes.addAll(path);
+            specialNodes = specialNodes.stream().distinct().toList();
+        }
         for (int i = 0; i < count; ++i) {
-            if (!Objects.equals(nodes.get(i), "Eden") && !Objects.equals(nodes.get(i), "Earth")) {
+            if (!specialNodes.contains(nodes.get(i))) {
                 var posS = getNodePos(count, i, 0.07);
                 g.drawString(nodes.get(i), posS.getFirst(), posS.getSecond());
             }
             var posO = getNodePos(count, i, 0.0);
             g.drawOval(posO.getFirst(), posO.getSecond(), 6, 6);
         }
-        {
-            g.setColor(new Color(240, 100, 100));
-            var curPos = getNodePos(count, name2idx.get(currentNode), 0.07);
-            g.drawString(currentNode, curPos.getFirst(), curPos.getSecond());
-        }
+        g.setFont(new Font("Bold", 1, 10));
         {
             g.setColor(new Color(0, 0, 180));
-            var curPos = getNodePos(count, name2idx.get("Eden"), 0.07);
-            g.drawString("Eden", curPos.getFirst(), curPos.getSecond());
+            for (var p : path) {
+                var curPos = getNodePos(count, name2idx.get(p), 0.07);
+                g.drawString(p, curPos.getFirst(), curPos.getSecond());
+            }
         }
         {
-            g.setColor(new Color(0, 0, 180));
-            var curPos = getNodePos(count, name2idx.get("Earth"), 0.07);
-            g.drawString("Earth", curPos.getFirst(), curPos.getSecond());
+            g.setColor(new Color(150, 20, 20));
+            for (var specialNode : List.of("Eden", "Earth")) {
+                if (!path.contains(specialNode)) {
+                    var curPos = getNodePos(count, name2idx.get(specialNode), 0.07);
+                    g.drawString(specialNode, curPos.getFirst(), curPos.getSecond());
+                }
+            }
         }
         {
             for (var entry : allEdges.entrySet()) {

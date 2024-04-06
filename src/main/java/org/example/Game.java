@@ -48,13 +48,13 @@ public class Game {
             var moveInfo = json.move(move);
             var planetInfo = moveInfo.getPlanetInfo();
             System.out.println("Planet: " + planetInfo.getName());
-            System.out.println("Current load");
+            System.out.println("$ Current load");
             shipVisualizer.visualize(moveInfo.getShipLoad(), shipBaggage.getCapacityX(), shipBaggage.getCapacityY());
             shipBaggage.setLoad(moveInfo.getShipLoad());
             currentPlanet = planetInfo.getName();
             var planet = navigator.setPlanetGarbage(currentPlanet, planetInfo.getGarbage());
             planet.makeOptimalLoad(shipBaggage);
-            System.out.println("New load");
+            System.out.println("$ New load");
             shipVisualizer.visualize(shipBaggage.getLoad(), shipBaggage.getCapacityX(), shipBaggage.getCapacityY());
             json.load(shipBaggage.getLoad());
             if (move.contains("Eden")) {

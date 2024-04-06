@@ -3,13 +3,13 @@ package org.example.model.tetris
 import org.example.model.Figure
 import org.example.model.PlacedFigure
 
-class TAbstractGreedySolver(val priorityFunc: (Int, Int, Int, Int) -> Int) : ISolver {
-    private fun getPriority(pf: PlacedFigure): Int {
+class TAbstractGreedySolver(val priorityFunc: (Int, Int, Int, Int, Int) -> Double) : ISolver {
+    private fun getPriority(pf: PlacedFigure): Double {
         val minX = pf.figure.coords.minOf { a -> a[0] }
         val maxX = pf.figure.coords.maxOf { a -> a[0] }
         val minY = pf.figure.coords.minOf { a -> a[1] }
         val maxY = pf.figure.coords.maxOf { a -> a[1] }
-        return priorityFunc(minX, maxX, minY, maxY)
+        return priorityFunc(pf.figure.coords.size, minX, maxX, minY, maxY)
     }
 
     private fun findTransformation(currentBaggage: IShipBaggage, pf: PlacedFigure, grid: Grid): Figure? {

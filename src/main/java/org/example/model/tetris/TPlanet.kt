@@ -8,10 +8,18 @@ class TPlanet : IPlanet {
 
     companion object {
         private val solvers: List<ISolver> = listOf(
-                TAbstractGreedySolver { minX, maxX, minY, maxY -> (maxY - minY + maxX - minX) },  // By perimetr
-                TAbstractGreedySolver { minX, maxX, minY, maxY -> (maxY - minY) * (maxX - minX) },  // By area
-                TAbstractGreedySolver { minX, maxX, minY, maxY -> -(maxY - minY + maxX - minX) },  // From big to small
-                TAbstractGreedySolver { minX, maxX, minY, maxY -> -(maxY - minY) * (maxX - minX) },
+            TAbstractGreedySolver { _, minX, maxX, minY, maxY ->
+                (maxY - minY + maxX - minX).toDouble() },  // By perimetr
+            TAbstractGreedySolver { _, minX, maxX, minY, maxY ->
+                (maxY - minY) * (maxX - minX).toDouble() },  // By area
+            TAbstractGreedySolver { sz, minX, maxX, minY, maxY ->
+                sz.toDouble() / ((maxY - minY) * (maxX - minX)) },  // By density
+            TAbstractGreedySolver { _, minX, maxX, minY, maxY ->
+                -(maxY - minY + maxX - minX).toDouble() },  // From big to small
+            TAbstractGreedySolver { _, minX, maxX, minY, maxY ->
+                -(maxY - minY) * (maxX - minX).toDouble() },
+            TAbstractGreedySolver { sz, minX, maxX, minY, maxY ->
+                -sz.toDouble() / ((maxY - minY) * (maxX - minX)) },
         )
         fun getSolvers(): List<ISolver> {
             return solvers;
