@@ -11,6 +11,8 @@ public interface IPlanet {
     // ничего не меняя в их состояниях
     int getHowManyCanAdd(IShipBaggage baggage);
 
+    double howMuchCanFillPercentage(IShipBaggage baggage);
+
     // Загружает корабль
     void makeOptimalLoad(IShipBaggage baggage);
 

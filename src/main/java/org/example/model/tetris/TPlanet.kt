@@ -2,6 +2,7 @@ package org.example.model.tetris
 
 import org.example.model.Figure
 import org.example.model.PlacedFigure
+import org.example.service.UtilService
 
 class TPlanet : IPlanet {
     private var garbage: MutableMap<String, Figure> = HashMap()
@@ -41,6 +42,11 @@ class TPlanet : IPlanet {
 
     override fun getHowManyCanAdd(baggage: IShipBaggage): Int {
         return findOptimalLoad(baggage).size - baggage.load.size
+    }
+
+    override fun howMuchCanFillPercentage(baggage: IShipBaggage): Double {
+        val optimal = findOptimalLoad(baggage)
+        return UtilService.getInstance().calcFillPercentage(optimal, baggage.capacityX, baggage.capacityY) - UtilService.getInstance().calcFillPercentage(baggage)
     }
 
     override fun makeOptimalLoad(baggage: IShipBaggage) {

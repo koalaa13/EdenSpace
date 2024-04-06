@@ -4,6 +4,7 @@ import org.example.model.Figure;
 import org.example.model.PlacedFigure;
 import org.example.model.graph.Graph;
 import org.example.model.response.InfoResponse;
+import org.example.model.tetris.IShipBaggage;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -58,5 +59,9 @@ public class UtilService {
                 .sum();
         int all = baggageHeight * baggageWidth;
         return (double) filledCount / (double) all * 100.0;
+    }
+
+    public Double calcFillPercentage(IShipBaggage shipBaggage) {
+        return calcFillPercentage(shipBaggage.getLoad(), shipBaggage.getCapacityX(), shipBaggage.getCapacityY());
     }
 }
