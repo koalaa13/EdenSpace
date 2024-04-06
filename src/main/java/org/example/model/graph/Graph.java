@@ -19,4 +19,7 @@ public class Graph {
         return g.getOrDefault(v, new HashMap<>());
     }
 
+    public Map<String, Map<String, Integer>> getAllEdges() {
+        return g;
+    }
 }
